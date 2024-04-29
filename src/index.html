@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+  </head>
+  <body>
+    <div class="header">To do list</div>
+    <div class="sidebar">
+      <div class="tasks">
+        <ul>
+          <li id="addTask" class="tasksList">Add Task</li>
+          <li id="today" class="tasksList">Today</li>
+          <li id="thisWeek" class="tasksList">This week</li>
+          <li id="important" class="tasksList">Important</li>
+          <li id="completed" class="tasksList">Completed</li>
+        </ul>
+      </div>
+      <div id="tasksOverlay"></div>
+      <div class="tasksModal">
+        <div class="title">New Task</div>
+        <button class="exit">&times;</button>
+        <form action="GET" class="newTask" action="results.html">
+          <label for="name" aria-label="required">Name</label
+          ><input
+            type="text"
+            id="name"
+            placeholder="Clean espresso machine"
+            required
+          /><label for="description">Description</label
+          ><input type="text" id="description" /><label for="date"
+            >Due date</label
+          ><input type="date" id="date" placeholder="26/05/2024" />
+          <fieldset class="priority">
+            <legend>Select priority</legend>
+            <input type="radio" id="priority1" value="low" name="priority" />
+            <label for="priority1">Low</label>
+            <input type="radio" id="priority2" value="medium" name="priority" />
+            <label for="priority2">Medium</label>
+            <input type="radio" id="priority3" value="high" name="priority" />
+            <label for="priority3">High</label>
+          </fieldset>
+          <label for="notes">Notes</label><textarea></textarea>
+          <label for="done">Completed</label><input type="checkbox" id="done" />
+          <button id="tasksAdd" class="tasksBtn" type="submit">Add</button>
+        </form>
+      </div>
+      <div class="projects">
+        <ul>
+          <li id="addProject" class="projectsList">Add Project</li>
+          <li id="finishedProjects" class="projectsList">Finished Projects</li>
+        </ul>
+      </div>
+    </div>
+    <div class="main">
+      <div class="new"></div>
+      <div class="inProgress"></div>
+      <div class="finished"></div>
+    </div>
+    <div class="footer">Made by imaciej10</div>
+  </body>
+</html>
