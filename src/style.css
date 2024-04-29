@@ -111,7 +111,7 @@ li {
   transition: 200ms ease-in-out;
   z-index: 3;
   background-color: white;
-  height: 50vh;
+  height: 56vh;
   width: 30vw;
   min-width: 300px;
   padding: 1rem 1rem 2.5rem 1rem;
@@ -131,7 +131,7 @@ li {
   font-size: 2rem;
 }
 .newTask {
-  margin-top: -30px;
+  margin-top: -60px;
   display: grid;
   grid-template: repeat(12, 0.4fr) / 1fr 1fr;
   justify-items: center;
@@ -148,17 +148,26 @@ label {
 label[for="priority1"],
 label[for="priority2"],
 label[for="priority3"] {
-  font-size: 1.3rem;
-  margin-left: -50px;
+  font-size: 1.2rem;
 }
 
 input {
   width: 80%;
-  padding: 0.7rem;
-  font-size: 1.1rem;
+  padding: 0.6rem;
+  font-size: 1rem;
   grid-column: 1/3;
 }
 
+input[type="date"] {
+  padding: 1rem;
+}
+
+select {
+  grid-column: 1/3;
+  width: 80%;
+  padding: 0.6rem;
+  font-size: 1rem;
+}
 button#tasksAdd {
   grid-column: 1/3;
 }
@@ -179,18 +188,18 @@ button {
 
 textarea {
   grid-column: 1/3;
-  width: 70%;
+  width: 80%;
   overflow: auto;
   padding: 0.5rem 1rem;
-  min-height: 30px;
+  min-height: 50px;
   min-width: 250px;
   max-height: 70px;
-  max-width: 400px;
+  max-width: 80%;
 }
-label[for="done"] {
+label[for="favorite"] {
   grid-area: 10 /1/ 11/ 2;
 }
-input[id="done"] {
+input[id="favorite"] {
   grid-area: 10 / 2 / 11 / 3;
 }
 button.exit {

@@ -28,23 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainElements = loadMain();
 
   addTask.addEventListener("click", () => {
-    mainElements.tasksModal.classList.add("active");
-    mainElements.overlay.classList.add("active");
+    mainElements.openModal(mainElements.tasksModal);
   });
 
   mainElements.closeTasksBtn.addEventListener("click", () => {
-    mainElements.tasksModal.classList.remove("active");
-    mainElements.overlay.classList.remove("active");
+    mainElements.closeModal(mainElements.tasksModal);
   });
 
   mainElements.addProject.addEventListener("click", () => {
-    mainElements.projectsModal.classList.add("active");
-    mainElements.overlay.classList.add("active");
+    mainElements.openModal(mainElements.projectsModal);
   });
 
   mainElements.closeProjectsBtn.addEventListener("click", () => {
-    mainElements.projectsModal.classList.remove("active");
-    mainElements.overlay.classList.remove("active");
+    mainElements.closeModal(mainElements.projectsModal);
   });
 
   today.addEventListener("click", () => {

@@ -27,7 +27,7 @@
           ><input
             type="text"
             id="name"
-            placeholder="Clean espresso machine"
+            placeholder="Fix espresso machine"
             required
           /><label for="description">Description</label
           ><input type="text" id="description" /><label for="date"
@@ -35,15 +35,29 @@
           ><input type="date" id="date" placeholder="26/05/2024" />
           <fieldset class="priority">
             <legend>Select priority</legend>
-            <input type="radio" id="priority1" value="low" name="priority" />
+            <input
+              type="radio"
+              id="priority1"
+              value="low"
+              name="priority"
+              checked
+            />
             <label for="priority1">Low</label>
             <input type="radio" id="priority2" value="medium" name="priority" />
             <label for="priority2">Medium</label>
             <input type="radio" id="priority3" value="high" name="priority" />
             <label for="priority3">High</label>
           </fieldset>
-          <label for="notes">Notes</label><textarea></textarea>
-          <label for="done">Completed</label><input type="checkbox" id="done" />
+          <label for="status">Status</label>
+          <select name="status" id="status">
+            <option value="new">New</option>
+            <option value="in progress">In progress</option>
+            <option value="finished">Finished</option>
+          </select>
+          <label for="notes">Notes</label
+          ><textarea id="notes" name="notes"></textarea>
+          <label for="favorite">Favorite</label
+          ><input type="checkbox" id="favorite" />
           <button id="tasksAdd" class="tasksBtn" type="submit">Add</button>
         </form>
       </div>

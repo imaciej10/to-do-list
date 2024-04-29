@@ -1,3 +1,5 @@
+import loadMain from "./main.js";
+
 class Project {
   constructor(name) {
     this.name = name;
@@ -11,5 +13,14 @@ class Project {
     console.log(`${this.name} has been deleted`);
   }
 }
+
+const projectsForm = document.querySelector(".newProject");
+projectsForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const mainElements = loadMain();
+
+  projectsForm.reset();
+  mainElements.closeModal(mainElements.projectsModal);
+});
 
 export { Project };

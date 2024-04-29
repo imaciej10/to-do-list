@@ -16,6 +16,17 @@ const loadMain = function () {
   const projectsModal = document.querySelector(".projectsModal");
   const closeTasksBtn = document.querySelector("button[data-close-button]");
   const closeProjectsBtn = document.getElementById("exitProjects");
+
+  const closeModal = function (window) {
+    window.classList.remove("active");
+    overlay.classList.remove("active");
+  };
+
+  const openModal = function (window) {
+    window.classList.add("active");
+    overlay.classList.add("active");
+  };
+
   return {
     main,
     newContainer,
@@ -33,6 +44,8 @@ const loadMain = function () {
     closeProjectsBtn,
     closeTasksBtn,
     projectsModal,
+    closeModal,
+    openModal,
   };
 };
 
