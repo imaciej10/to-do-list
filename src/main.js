@@ -12,8 +12,10 @@ const loadMain = function () {
   const addProject = document.getElementById("addProject");
   const finishedProjects = document.getElementById("finishedProjects");
   const tasksModal = document.querySelector(".tasksModal");
-  const tasksOverlay = document.getElementById("tasksOverlay");
-
+  const overlay = document.getElementById("tasksOverlay");
+  const projectsModal = document.querySelector(".projectsModal");
+  const closeTasksBtn = document.querySelector("button[data-close-button]");
+  const closeProjectsBtn = document.getElementById("exitProjects");
   return {
     main,
     newContainer,
@@ -27,7 +29,10 @@ const loadMain = function () {
     addProject,
     finishedProjects,
     tasksModal,
-    tasksOverlay,
+    overlay,
+    closeProjectsBtn,
+    closeTasksBtn,
+    projectsModal,
   };
 };
 

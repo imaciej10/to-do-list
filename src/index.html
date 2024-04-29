@@ -21,8 +21,8 @@
       <div id="tasksOverlay"></div>
       <div class="tasksModal">
         <div class="title">New Task</div>
-        <button class="exit">&times;</button>
-        <form action="GET" class="newTask" action="results.html">
+        <button class="exit" data-close-button>&times;</button>
+        <form class="newTask" action="results.html">
           <label for="name" aria-label="required">Name</label
           ><input
             type="text"
@@ -45,6 +45,14 @@
           <label for="notes">Notes</label><textarea></textarea>
           <label for="done">Completed</label><input type="checkbox" id="done" />
           <button id="tasksAdd" class="tasksBtn" type="submit">Add</button>
+        </form>
+      </div>
+      <div class="projectsModal">
+        <div class="projectsTitle">New Project</div>
+        <button class="exit" id="exitProjects">&times;</button>
+        <form action="results.html" method="get" class="newProject">
+          <label for="project">Name</label><input type="text" id="project" />
+          <button>Add</button>
         </form>
       </div>
       <div class="projects">

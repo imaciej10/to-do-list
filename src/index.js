@@ -29,8 +29,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   addTask.addEventListener("click", () => {
     mainElements.tasksModal.classList.add("active");
-    mainElements.tasksOverlay.classList.add("active");
+    mainElements.overlay.classList.add("active");
   });
+
+  mainElements.closeTasksBtn.addEventListener("click", () => {
+    mainElements.tasksModal.classList.remove("active");
+    mainElements.overlay.classList.remove("active");
+  });
+
+  mainElements.addProject.addEventListener("click", () => {
+    mainElements.projectsModal.classList.add("active");
+    mainElements.overlay.classList.add("active");
+  });
+
+  mainElements.closeProjectsBtn.addEventListener("click", () => {
+    mainElements.projectsModal.classList.remove("active");
+    mainElements.overlay.classList.remove("active");
+  });
+
   today.addEventListener("click", () => {
     alert("today");
   });
@@ -44,9 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("completed");
   });
 
-  addProject.addEventListener("click", () => {
-    alert("add project");
-  });
   finishedProjects.addEventListener("click", () => {
     alert("finished projects");
   });
