@@ -1,6 +1,7 @@
+import { eachDayOfInterval } from "date-fns";
 import loadMain from "./main.js";
 
-class Task {
+export default class Task {
   constructor(title, description, dueDate, priority, notes, favorite, status) {
     this.title = title;
     this.description = description;
@@ -24,7 +25,7 @@ class Task {
   }
 }
 
-const getInputvalues = function () {
+export const getInputvalues = function () {
   const taskTitle = document.getElementById("name").value;
   const taskDescription = document.getElementById("description").value;
   const taskDate = document.getElementById("date").value;
@@ -46,16 +47,78 @@ const getInputvalues = function () {
   );
 };
 
-const tasksForm = document.querySelector(".newTask");
+export const setDefaultDate = function () {
+  const today = new Date();
 
-tasksForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  const mainElements = loadMain();
-  const newTask = getInputvalues();
-  console.log(newTask);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const defaultDate = year + "-" + month + "-" + day;
 
-  tasksForm.reset();
-  mainElements.closeModal(mainElements.tasksModal);
-});
+  document.getElementById("date").value = defaultDate;
+};
 
-export { Task };
+export const getProj1Tasks = function () {
+  const task1 = new Task(
+    "Replace boiler",
+    "Use something to pry it",
+    new Date(),
+    "High",
+    "How do I do that?",
+    false,
+    "New"
+  );
+  const task2 = new Task(
+    "Do some descalling",
+    "Easy peasy",
+    new Date(),
+    "Medium",
+    "be careful, please!",
+    false,
+    "In progress"
+  );
+  const task3 = new Task(
+    "Check water container",
+    "ya know.. they sometimes get messy",
+    new Date(),
+    "Low",
+    "easyyyy",
+    false,
+    "Finished"
+  );
+
+  return [task1, task2, task3];
+};
+
+export const getProj2Tasks = function () {
+  const task4 = new Task(
+    "Implement App",
+    "Create a new food delivery app based on recent customer request. Try to use SOLID principles along the way",
+    new Date(),
+    "High",
+    "Don't mess up",
+    false,
+    "New"
+  );
+
+  const task5 = new Task(
+    "Watch coding videos",
+    "Gather more knowledge about ES6 modules and encapsulating",
+    new Date(),
+    "Low",
+    "yikes",
+    false,
+    "New"
+  );
+
+  const task6 = new Task(
+    "Create calculator",
+    "Basic stuff, you should do it",
+    new Date(),
+    "Medium",
+    "don't forget about the functions!",
+    false,
+    "In progress"
+  );
+  return [task4, task5, task6];
+};

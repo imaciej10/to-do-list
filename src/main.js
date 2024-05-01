@@ -1,8 +1,5 @@
 const loadMain = function () {
   const main = document.querySelector(".main");
-  const newContainer = document.querySelector(".new");
-  const inProgressContainer = document.querySelector(".inProgress");
-  const finishedContainer = document.querySelector(".finished");
 
   const addTask = document.getElementById("addTask");
   const today = document.getElementById("today");
@@ -29,9 +26,6 @@ const loadMain = function () {
 
   return {
     main,
-    newContainer,
-    inProgressContainer,
-    finishedContainer,
     addTask,
     today,
     thisWeek,

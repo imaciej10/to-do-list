@@ -1,12 +1,11 @@
-import loadMain from "./main.js";
-
-class Project {
-  constructor(name) {
+export default class Project {
+  constructor(name, tasks) {
     this.name = name;
+    this.tasks = [];
   }
 
-  addTask() {
-    console.log(`${this.name} has been added`);
+  addTask(task) {
+    this.tasks.push(task);
   }
 
   deleteTask() {
@@ -14,13 +13,15 @@ class Project {
   }
 }
 
-const projectsForm = document.querySelector(".newProject");
-projectsForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  const mainElements = loadMain();
+export const getNewProject = function () {
+  const projectTitle = document.getElementById("project").value;
 
-  projectsForm.reset();
-  mainElements.closeModal(mainElements.projectsModal);
-});
+  return new Project(projectTitle);
+};
 
-export { Project };
+export const getDefaultProjects = function () {
+  const project1 = "Fix espresso machine";
+  const project2 = "Learn how to code";
+
+  return [new Project(project1), new Project(project2)];
+};

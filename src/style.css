@@ -48,7 +48,63 @@ body {
   height: 50%;
   width: 100%;
 }
+.taskContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  row-gap: 1rem;
+}
 
+.task {
+  height: 10%;
+  border: 2px solid black;
+  font-size: 1.3rem;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 600ms;
+  border-radius: 0.5rem;
+  align-items: center;
+  justify-items: center;
+}
+.task:hover {
+  grid-template: repeat (4, 1fr) / repeat (2, 1fr);
+  height: 40%;
+}
+
+.task:hover > * {
+  visibility: visible;
+}
+
+.task > * {
+  visibility: hidden;
+}
+
+.taskTitle {
+  grid-area: 1 / 1 / 2 /3;
+  visibility: visible;
+}
+
+.taskDescription {
+  grid-area: 2 / 1 / 3 /3;
+  justify-self: start;
+}
+.taskPriority {
+  grid-area: 3 / 1 / 4 /3;
+  font-size: 1rem;
+  justify-self: start;
+}
+.taskDate {
+  grid-area: 3 / 2 / 4/ 3;
+}
+
+.projectID {
+  grid-area: 4 / 1 / 5/ 2;
+}
+.taskFavorite {
+  grid-area: 4 / 2 / 5/ 3;
+  justify-self: end;
+}
 .projects {
   height: 50%;
   width: 100%;
@@ -61,6 +117,24 @@ li {
   margin-top: 0.6rem;
 }
 
+.projectsContainer {
+  border: 1px white solid;
+  width: 100%;
+  height: 55%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 0.2rem;
+}
+
+.project {
+  align-self: start;
+  color: white;
+  padding: 0.3rem;
+  width: 100%;
+  font-size: 1.2rem;
+}
 /* main */
 .main {
   background-color: var(--main-color);
@@ -75,7 +149,6 @@ li {
 .new {
   border: 3px dashed orange;
   border-radius: 1rem;
-  display: grid;
 }
 
 .inProgress {
@@ -256,6 +329,16 @@ button.exit {
   font-size: 1.8rem;
 }
 
+.color {
+  display: flex;
+  width: 100%;
+  border: 1px black solid;
+}
+#color-picker {
+  width: 20%;
+  align-self: end;
+  display: block;
+}
 form.newProject {
   display: flex;
   flex-direction: column;

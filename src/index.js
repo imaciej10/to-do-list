@@ -1,34 +1,62 @@
 import _ from "lodash";
 import "./style.css";
-import { Task } from "./tasks.js";
-import { Project } from "./projects.js";
+import Task, {
+  getInputvalues,
+  setDefaultDate,
+  getProj1Tasks,
+  getProj2Tasks,
+} from "./tasks.js";
+import Project, { getNewProject, getDefaultProjects } from "./projects.js";
+import DOM from "./dom.js";
 import loadMain from "./main.js";
 const tasks = [];
 const projects = [];
-
-let newApp = new Task(
-  "Implement App",
-  "Create a new food delivery app basec on recent customer request. Try to use SOLID principles along the way",
-  new Date(),
-  "High",
-  "Don't mess up",
-  false,
-  "ready"
-);
-
-console.log(newApp);
-tasks.push(newApp);
-let myProject = new Project(newApp.title);
-myProject.addTask();
-myProject.deleteTask();
-projects.push(myProject);
+let tasks1 = [];
+let tasks2 = [];
+let activeProject;
 console.log(projects);
 
+const [proj1, proj2] = getDefaultProjects();
+tasks1 = getProj1Tasks();
+tasks2 = getProj2Tasks();
+activeProject = proj1.name;
+tasks1.forEach((task) => proj1.addTask(task));
+tasks2.forEach((task) => proj2.addTask(task));
+
+projects.push(proj1, proj2);
+console.log(proj1);
+console.log(proj2);
+projects.forEach((project) => {
+  DOM.appendProject("project", project.name);
+  DOM.updateTasks(project);
+});
+
+const tasksForm = document.querySelector(".newTask");
+const projectsForm = document.querySelector(".newProject");
+const mainElements = loadMain();
+
 document.addEventListener("DOMContentLoaded", () => {
-  const mainElements = loadMain();
+  tasksForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const newTask = getInputvalues();
+    tasksForm.reset();
+    mainElements.closeModal(mainElements.tasksModal);
+    tasks.push(newTask);
+  });
+
+  projectsForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const newProject = getNewProject();
+    projectsForm.reset();
+    mainElements.closeModal(mainElements.projectsModal);
+    projects.push(newProject);
+    activeProject = newProject.name;
+    DOM.appendProject("project", newProject.name);
+  });
 
   addTask.addEventListener("click", () => {
     mainElements.openModal(mainElements.tasksModal);
+    setDefaultDate();
   });
 
   mainElements.closeTasksBtn.addEventListener("click", () => {
@@ -54,9 +82,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   completed.addEventListener("click", () => {
     alert("completed");
-  });
-
-  finishedProjects.addEventListener("click", () => {
-    alert("finished projects");
   });
 });

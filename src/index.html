@@ -28,9 +28,13 @@
             type="text"
             id="name"
             placeholder="Fix espresso machine"
+            minlength="3"
+            maxlength="28"
+            aria-label="required"
             required
           /><label for="description">Description</label
-          ><input type="text" id="description" /><label for="date"
+          ><input type="text" id="description" maxlength="35" /><label
+            for="date"
             >Due date</label
           ><input type="date" id="date" placeholder="26/05/2024" />
           <fieldset class="priority">
@@ -55,7 +59,7 @@
             <option value="finished">Finished</option>
           </select>
           <label for="notes">Notes</label
-          ><textarea id="notes" name="notes"></textarea>
+          ><textarea id="notes" name="notes" maxlength="40"></textarea>
           <label for="favorite">Favorite</label
           ><input type="checkbox" id="favorite" />
           <button id="tasksAdd" class="tasksBtn" type="submit">Add</button>
@@ -65,21 +69,50 @@
         <div class="projectsTitle">New Project</div>
         <button class="exit" id="exitProjects">&times;</button>
         <form action="results.html" method="get" class="newProject">
-          <label for="project">Name</label><input type="text" id="project" />
+          <label for="project">Name</label
+          ><input
+            type="text"
+            id="project"
+            aria-label="required"
+            required
+            minlength="5"
+            maxlength="20"
+          />
+          <div class="color">
+            <label for="color-picker">Color:</label>
+            <input type="color" value="#ff0000" id="color-picker" />
+          </div>
           <button>Add</button>
         </form>
       </div>
       <div class="projects">
         <ul>
           <li id="addProject" class="projectsList">Add Project</li>
-          <li id="finishedProjects" class="projectsList">Finished Projects</li>
         </ul>
+        <div class="projectsContainer">Current Projects</div>
       </div>
     </div>
     <div class="main">
-      <div class="new"></div>
-      <div class="inProgress"></div>
-      <div class="finished"></div>
+      <div class="new taskContainer">
+        <div class="task">
+          <div class="taskTitle">Hejo wszystkim</div>
+          <div class="taskDescription">affadfsdfdsfdsfds</div>
+          <div class="taskDate">25-10-2520</div>
+          <div class="taskPriority">High</div>
+          <div class="projectID">Coffee</div>
+          <div class="taskFavorite">*</div>
+        </div>
+        <div class="task">
+          <div class="taskTitle">Hejo wszystkim</div>
+          <div class="taskDescription">affadfsdfdsfdsfds</div>
+          <div class="taskDate">25-10-2520</div>
+          <div class="taskPriority">High</div>
+          <div class="projectID">Coffee</div>
+          <div class="taskFavorite">*</div>
+        </div>
+      </div>
+      <div class="inProgress taskContainer"></div>
+      <div class="finished taskContainer"></div>
     </div>
     <div class="footer">Made by imaciej10</div>
   </body>
