@@ -1,5 +1,5 @@
-const form = document.querySelector(".newTask");
+// const form = document.querySelector(".newTask");
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-});
+// form.addEventListener("submit", function (event) {
+//   event.preventDefault();
+// });
