@@ -44,6 +44,9 @@ body {
   padding: 1rem 2rem;
 }
 
+.dropzone.dragover {
+  background-color: rgba(20, 202, 140, 0.5);
+}
 .tasks {
   height: 50%;
   width: 100%;
@@ -60,6 +63,7 @@ body {
 }
 
 .task {
+  user-select: none;
   position: relative;
   height: 10%;
   border: 2px solid black;
@@ -137,6 +141,25 @@ li {
 .favoriteIcon.active {
   visibility: visible;
   opacity: 1;
+}
+
+.editTask,
+.deleteTask {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0.5;
+  background-color: none;
+  top: 85%;
+  height: 30px;
+  width: auto;
+  z-index: 5;
+}
+.editTask {
+  right: 15%;
+}
+
+.deleteTask {
+  right: 3%;
 }
 
 .projectsContainer {
@@ -222,6 +245,26 @@ li {
   transform: translate(-50%, -50%) scale(1);
   transition: 200ms ease-in-out;
 }
+.editTasksModal {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+  z-index: 3;
+  background-color: white;
+  height: 70vh;
+  width: 30vw;
+  min-width: 300px;
+  padding: 1rem 1rem 2.5rem 1rem;
+  border: 2px black solid;
+}
+
+.editTasksModal.active {
+  transform: translate(-50%, -50%) scale(1);
+  transition: 200ms ease-in-out;
+}
 
 .title {
   margin-bottom: 0;
@@ -230,7 +273,8 @@ li {
   align-items: center;
   font-size: 2rem;
 }
-.newTask {
+.newTask,
+.editTaskForm {
   margin-top: -60px;
   display: grid;
   grid-template: repeat(12, 0.4fr) / 1fr 1fr;
@@ -286,6 +330,9 @@ button {
   user-select: none;
 }
 
+.dragging {
+  opacity: 0.5;
+}
 textarea {
   grid-column: 1/3;
   width: 80%;
@@ -296,10 +343,10 @@ textarea {
   max-height: 70px;
   max-width: 80%;
 }
-label[for="favorite"] {
+label[for="isFavorite"] {
   grid-area: 10 /1/ 11/ 2;
 }
-input[id="favorite"] {
+input[id="isFavorite"] {
   grid-area: 10 / 2 / 11 / 3;
 }
 button.exit {
@@ -380,7 +427,8 @@ form.newProject {
   transition: 200ms ease-in-out;
 }
 
-.projectsModal .exit {
+.projectsModal .exit,
+.exitTaskEdit {
   position: relative;
   height: 50px;
   width: auto;

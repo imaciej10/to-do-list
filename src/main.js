@@ -15,6 +15,8 @@ const loadMain = function () {
   const closeProjectsBtn = document.getElementById("exitProjects");
   const editProjectModal = document.querySelector(".editProjectModal");
   const closeEditProjectBtn = document.getElementById("exitEditProjects");
+  const closeEditTaskBtn = document.querySelector(".exitTaskEdit");
+  const editTaskModal = document.querySelector(".editTasksModal");
 
   const closeModal = function (window) {
     window.classList.remove("active");
@@ -42,6 +44,8 @@ const loadMain = function () {
     projectsModal,
     editProjectModal,
     closeEditProjectBtn,
+    closeEditTaskBtn,
+    editTaskModal,
     closeModal,
     openModal,
   };

@@ -32,7 +32,7 @@ export const getInputvalues = function () {
   ).value;
   const taskProject = document.getElementById("projectName").value;
   const taskNotes = document.getElementById("notes").value;
-  const taskFavorite = document.getElementById("favorite").checked;
+  const taskFavorite = document.getElementById("isFavorite").checked;
   const taskStatus = document.getElementById("status").value;
 
   return new Task(
@@ -47,6 +47,67 @@ export const getInputvalues = function () {
   );
 };
 
+function clearContainer(container) {
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+}
+
+function updateProjectsInForm(projects, container) {
+  clearContainer(container);
+  projects.forEach((project) => {
+    const option = document.createElement("option");
+    option.textContent = project.name;
+    container.appendChild(option);
+  });
+}
+
+export const populateForm = function (task, projects) {
+  const editTaskForm = document.querySelector(".editTaskForm");
+  const container = editTaskForm.querySelector("#projectName");
+  editTaskForm.querySelector("#name").value = task.title;
+  editTaskForm.querySelector("#description").value = task.description;
+
+  editTaskForm.querySelector("#date").value = "2024-05-05";
+  updateProjectsInForm(projects, container);
+  const priorityRadioButton = editTaskForm.querySelector(
+    `input[name="priority"][value="${task.priority}"]`
+  );
+
+  if (priorityRadioButton) {
+    priorityRadioButton.checked = true;
+  }
+  editTaskForm.querySelector("#projectName").value = task.project;
+  editTaskForm.querySelector("#notes").value = task.notes;
+  editTaskForm.querySelector("#isFavorite").checked = task.favorite;
+  editTaskForm.querySelector("#status").value = task.status;
+};
+
+export const getEditedTask = function () {
+  const editTaskForm = document.querySelector(".editTaskForm");
+
+  const taskTitle = editTaskForm.querySelector("#name").value;
+  const taskDescription = editTaskForm.querySelector("#description").value;
+  const taskDate = editTaskForm.querySelector("#date").value;
+  const taskPriority = editTaskForm.querySelector(
+    'input[name="priority"]:checked'
+  ).value;
+  const taskProject = editTaskForm.querySelector("#projectName").value;
+  const taskNotes = editTaskForm.querySelector("#notes").value;
+  const taskFavorite = editTaskForm.querySelector("#isFavorite").checked;
+  const taskStatus = editTaskForm.querySelector("#status").value;
+
+  return new Task(
+    taskTitle,
+    taskDescription,
+    taskDate,
+    taskPriority,
+    taskNotes,
+    taskFavorite,
+    taskStatus,
+    taskProject
+  );
+};
 export const setDefaultDate = function () {
   const today = new Date();
 

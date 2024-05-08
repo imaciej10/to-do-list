@@ -5,6 +5,7 @@ import Task, {
   setDefaultDate,
   getProj1Tasks,
   getProj2Tasks,
+  getEditedTask,
 } from "./tasks.js";
 import Project, {
   getNewProject,
@@ -14,10 +15,30 @@ import Project, {
 import DOM from "./dom.js";
 import loadMain from "./main.js";
 const tasks = [];
-const projects = [];
+export const projects = [];
 let tasks1 = [];
 let tasks2 = [];
 let editedProjectName;
+let projectToEdit;
+let taskToEdit;
+
+const mainElements = loadMain();
+
+const modalWindows = [
+  { button: mainElements.closeTasksBtn, window: mainElements.tasksModal },
+  {
+    button: mainElements.closeProjectsBtn,
+    window: mainElements.projectsModal,
+  },
+  {
+    button: mainElements.closeEditProjectBtn,
+    window: mainElements.editProjectModal,
+  },
+  {
+    button: mainElements.closeEditTaskBtn,
+    window: mainElements.editTaskModal,
+  },
+];
 
 const [proj1, proj2] = getDefaultProjects();
 tasks1 = getProj1Tasks();
@@ -34,7 +55,7 @@ projects.forEach((project) => {
 const tasksForm = document.querySelector(".newTask");
 const projectsForm = document.querySelector(".newProject");
 const editProjectForm = document.querySelector(".editProject");
-const mainElements = loadMain();
+const editTaskForm = document.querySelector(".editTaskForm");
 
 function formatDate(date) {
   return date.toISOString().split("T")[0];
@@ -74,7 +95,6 @@ function handleOptionClick(id) {
 
 function filterTasksArray(param) {
   const [today, thisWeek] = getDates();
-  let filter;
 
   if (param === "thisWeek") {
     projects.forEach((project) => {
@@ -94,8 +114,13 @@ function filterTasksArray(param) {
     projects.forEach((project) => {
       project.filterTasksByFinished();
     });
+  } else if (param === "favorite") {
+    projects.forEach((project) => {
+      project.filterTasksByFavorite();
+    });
   } else if (param === "all") {
     DOM.clearDashboard();
+    console.log(projects);
     projects.forEach((project) => DOM.updateTasks(project, project.tasks));
     return;
   }
@@ -125,12 +150,34 @@ document.addEventListener("DOMContentLoaded", () => {
     DOM.updateProjectsInForm(projects);
   });
 
+  editTaskForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const editedTask = getEditedTask();
+    const index = findProjectIndex(projectToEdit);
+
+    const project = projects[index];
+    for (let i = 0; i < projects[index].tasks.length; i++) {
+      if (project.tasks[i].title === taskToEdit) {
+        project.tasks.splice(i, 1, editedTask);
+      }
+    }
+
+    DOM.clearDashboard();
+    projects.forEach((project) => {
+      DOM.updateTasks(project, project.tasks);
+    });
+    editTaskForm.reset();
+    mainElements.closeModal(mainElements.editTaskModal);
+  });
+
   editProjectForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const [newName, newColor] = getEditedProject();
     const index = findProjectIndex(editedProjectName);
     projects[index].name = newName;
     projects[index].color = newColor;
+    projects[index].tasks.forEach((task) => (task.project = newName));
+
     DOM.updateDashboard(
       editedProjectName,
       projects[index],
@@ -155,14 +202,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const projName = event.detail.projectName;
     const index = findProjectIndex(projName);
     const project = projects[index];
+
     for (let i = 0; i < projects[index].tasks.length; i++) {
-      if (project.tasks[i].title === taskName)
+      if (project.tasks[i].title === taskName) {
+        project.toggleStatus(i);
         console.log(project.tasks[i].favorite);
-      project.toggleStatus(i);
+      }
     }
   });
   document.addEventListener("projectDeselected", function (event) {
     DOM.clearDashboard();
+    console.log("los");
     projects.forEach((project) => {
       DOM.updateTasks(project, project.tasks);
     });
@@ -176,13 +226,50 @@ document.addEventListener("DOMContentLoaded", () => {
     DOM.updateTasks(projects[index], projects[index].tasks);
   });
 
+  document.addEventListener("statusChanged", function (event) {
+    let newStatus = event.detail.newStatus;
+    newStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    if (newStatus === "InProgress") newStatus = "In progress";
+    const taskName = event.detail.taskName;
+    const projName = event.detail.projName;
+    const index = findProjectIndex(projName);
+    const project = projects[index];
+    for (let i = 0; i < projects[index].tasks.length; i++) {
+      if (project.tasks[i].title === taskName)
+        project.tasks[i].status = newStatus;
+    }
+  });
+
   document.addEventListener("projectRemoved", function (event) {
     const projectName = event.detail.projectName;
     const index = findProjectIndex(projectName);
+
     if (index !== -1) {
       projects.splice(index, 1);
     }
     DOM.updateProjectsInForm(projects);
+  });
+
+  document.addEventListener("taskDeleted", function (event) {
+    const projectName = event.detail.projectName;
+    const taskName = event.detail.taskName;
+    const index = findProjectIndex(projectName);
+    const project = projects[index];
+    for (let i = 0; i < projects[index].tasks.length; i++) {
+      if (project.tasks[i].title === taskName) {
+        project.tasks.splice(i, 1);
+      }
+    }
+    console.log(projects);
+    DOM.clearDashboard();
+    projects.forEach((project) => {
+      DOM.updateTasks(project, project.tasks);
+    });
+  });
+
+  document.addEventListener("taskEdited", function (event) {
+    projectToEdit = event.detail.projectName;
+    taskToEdit = event.detail.taskName;
   });
 
   addTask.addEventListener("click", () => {
@@ -190,19 +277,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setDefaultDate();
   });
 
-  mainElements.closeTasksBtn.addEventListener("click", () => {
-    mainElements.closeModal(mainElements.tasksModal);
-  });
-
   mainElements.addProject.addEventListener("click", () => {
     mainElements.openModal(mainElements.projectsModal);
   });
 
-  mainElements.closeProjectsBtn.addEventListener("click", () => {
-    mainElements.closeModal(mainElements.projectsModal);
-  });
-
-  mainElements.closeEditProjectBtn.addEventListener("click", () => {
-    mainElements.closeModal(mainElements.editProjectModal);
-  });
+  modalWindows.forEach((modal) =>
+    modal.button.addEventListener("click", () =>
+      mainElements.closeModal(modal.window)
+    )
+  );
 });

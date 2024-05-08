@@ -20,6 +20,9 @@ export default class Project {
   filterTasksByImportance() {
     this.filteredTasks = this.tasks.filter((task) => task.priority === "High");
   }
+  filterTasksByFavorite() {
+    this.filteredTasks = this.tasks.filter((task) => task.favorite === true);
+  }
   filterTasksByFinished() {
     this.filteredTasks = this.tasks.filter(
       (task) => task.status === "Finished"
