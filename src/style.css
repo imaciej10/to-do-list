@@ -48,6 +48,10 @@ body {
   height: 50%;
   width: 100%;
 }
+
+.activeFilter {
+  color: red;
+}
 .taskContainer {
   display: flex;
   flex-direction: column;
@@ -56,6 +60,7 @@ body {
 }
 
 .task {
+  position: relative;
   height: 10%;
   border: 2px solid black;
   font-size: 1.3rem;
@@ -115,6 +120,23 @@ ul {
 }
 li {
   margin-top: 0.6rem;
+}
+
+.favoriteIcon {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0.5;
+  background-color: none;
+  top: 0%;
+  right: 0%;
+  height: 22px;
+  width: auto;
+  z-index: 5;
+}
+
+.favoriteIcon.active {
+  visibility: visible;
+  opacity: 1;
 }
 
 .projectsContainer {
@@ -189,7 +211,7 @@ li {
   transition: 200ms ease-in-out;
   z-index: 3;
   background-color: white;
-  height: 56vh;
+  height: 70vh;
   width: 30vw;
   min-width: 300px;
   padding: 1rem 1rem 2.5rem 1rem;
@@ -312,7 +334,8 @@ button.exit {
 
 /* Projects modal */
 
-.projectsModal {
+.projectsModal,
+.editProjectModal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -351,7 +374,8 @@ form.newProject {
   align-items: center;
 }
 
-.projectsModal.active {
+.projectsModal.active,
+.editProjectModal.active {
   transform: translate(-50%, -50%) scale(1);
   transition: 200ms ease-in-out;
 }

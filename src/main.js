@@ -13,6 +13,8 @@ const loadMain = function () {
   const projectsModal = document.querySelector(".projectsModal");
   const closeTasksBtn = document.querySelector("button[data-close-button]");
   const closeProjectsBtn = document.getElementById("exitProjects");
+  const editProjectModal = document.querySelector(".editProjectModal");
+  const closeEditProjectBtn = document.getElementById("exitEditProjects");
 
   const closeModal = function (window) {
     window.classList.remove("active");
@@ -38,6 +40,8 @@ const loadMain = function () {
     closeProjectsBtn,
     closeTasksBtn,
     projectsModal,
+    editProjectModal,
+    closeEditProjectBtn,
     closeModal,
     openModal,
   };

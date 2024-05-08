@@ -25,6 +25,9 @@ export default class Project {
       (task) => task.status === "Finished"
     );
   }
+  toggleStatus(index) {
+    this.tasks[index].favorite = !this.tasks[index].favorite;
+  }
 }
 
 export const getNewProject = function () {
@@ -32,6 +35,13 @@ export const getNewProject = function () {
   const color = document.getElementById("color-picker").value;
 
   return new Project(projectTitle, color);
+};
+
+export const getEditedProject = function () {
+  const newTitle = document.getElementById("editedTitle").value;
+  const newColor = document.getElementById("editedColor").value;
+
+  return [newTitle, newColor];
 };
 
 export const getDefaultProjects = function () {

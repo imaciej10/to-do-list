@@ -21,18 +21,6 @@ export default class Task {
     this.status = status;
     this.project = project;
   }
-
-  toggleStatus() {
-    this.status = "done";
-  }
-
-  togglePriority() {
-    this.priority = "xd";
-  }
-
-  checklist() {
-    this.checklist = true;
-  }
 }
 
 export const getInputvalues = function () {
@@ -42,6 +30,7 @@ export const getInputvalues = function () {
   const taskPriority = document.querySelector(
     'input[name="priority"]:checked'
   ).value;
+  const taskProject = document.getElementById("projectName").value;
   const taskNotes = document.getElementById("notes").value;
   const taskFavorite = document.getElementById("favorite").checked;
   const taskStatus = document.getElementById("status").value;
@@ -53,7 +42,8 @@ export const getInputvalues = function () {
     taskPriority,
     taskNotes,
     taskFavorite,
-    taskStatus
+    taskStatus,
+    taskProject
   );
 };
 
@@ -101,7 +91,7 @@ export const getProj1Tasks = function () {
     setDate("this week"),
     "Medium",
     "be careful, please!",
-    false,
+    true,
     "In progress",
     "Fix espresso machine"
   );
@@ -126,7 +116,7 @@ export const getProj2Tasks = function () {
     "2024-02-06",
     "High",
     "Don't mess up",
-    false,
+    true,
     "New",
     "Learn how to code"
   );
