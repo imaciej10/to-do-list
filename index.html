@@ -7,7 +7,14 @@
     <title>To-Do List</title>
   </head>
   <body>
-    <div class="header">To do list</div>
+    <div class="header">
+      <p>To Do List</p>
+      <img
+        src="../src/img/to-do-list-svgrepo-com.svg"
+        class="toDoLogo"
+        alt="To-Do Icon"
+      />
+    </div>
     <div class="sidebar">
       <div class="tasks">
         <ul>
@@ -169,14 +176,20 @@
         <ul>
           <li id="addProject" class="projectsList">Add Project</li>
         </ul>
-        <div class="projectsContainer">Current Projects</div>
+        <div class="projectsContainer"></div>
       </div>
     </div>
     <div class="main">
+      <h3 class="statusTitle" id="newTitle">New</h3>
+      <h3 class="statusTitle" id="inProgressTitle">In progress</h3>
+      <h3 class="statusTitle" id="finishedTitle">Finished</h3>
       <div class="new taskContainer dropzone"></div>
       <div class="inProgress taskContainer dropzone"></div>
       <div class="finished taskContainer dropzone"></div>
     </div>
-    <div class="footer">Made by imaciej10</div>
+    <div class="footer">
+      <p>Made by imaciej10</p>
+      <img src="../src/img/github.svg" class="gitHubLogo" alt="github logo" />
+    </div>
   <script defer src="index.bundle.js"></script><script defer src="main.bundle.js"></script></body>
 </html>
