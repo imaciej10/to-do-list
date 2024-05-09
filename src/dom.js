@@ -256,7 +256,7 @@ const DOM = (function () {
 
   function appendProject(className, project) {
     const newProjectElement = createProjectElement(className, project.name);
-    newProjectElement.style.backgroundColor = project.color;
+    newProjectElement.style.borderColor = project.color;
     appendIcons(newProjectElement);
     const deleteBtn = newProjectElement.querySelector(".delete");
     const editBtn = newProjectElement.querySelector(".edit");

@@ -83,6 +83,14 @@ function isDateInRange(date, dateArr) {
   return date >= dateArr[0] && date <= dateArr[1];
 }
 
+function tasksCount() {
+  let totalCount = 0;
+  projects.forEach((project) => {
+    totalCount += project.tasks.length;
+  });
+  return totalCount;
+}
+
 function findProjectIndex(projectName) {
   const index = projects.findIndex((project) => project.name === projectName);
   if (index === -1) {
@@ -294,11 +302,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   addTask.addEventListener("click", () => {
+    console.log(tasksCount());
+    if (tasksCount() >= 12) {
+      alert("Can't add more than twelve tasks!");
+      return;
+    }
     mainElements.openModal(mainElements.tasksModal);
     setDefaultDate();
   });
 
   mainElements.addProject.addEventListener("click", () => {
+    if (projects.length >= 5) {
+      alert("Can't add more than five projects!");
+      return;
+    }
     mainElements.openModal(mainElements.projectsModal);
   });
 

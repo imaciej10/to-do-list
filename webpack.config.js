@@ -16,7 +16,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: "Webpack 5",
-      fielname: `index.html`,
+      filename: `index.html`,
       template: "src/index.html",
       inject: "body",
     }),
