@@ -1,4 +1,3 @@
-import { create } from "lodash";
 import editIcon from "./img/edit.svg";
 import deleteIcon from "./img/delete.svg";
 import starIcon from "./img/star.svg";
@@ -38,9 +37,8 @@ const DOM = (function () {
       if (event.target.classList.contains("dropzone")) {
         event.target.classList.remove("dragover");
         const statusContainer = event.target.classList[0];
-        const taskName = dragged.getAttribute("data-task-name");
-        const projName = dragged.getAttribute("data-project-name");
-        changeStatus(statusContainer, taskName, projName);
+        const [taskName, projName] = getNameAttributes(dragged);
+        changeStatus(statusContainer, projName, taskName);
         event.target.appendChild(dragged);
       }
     });
@@ -74,6 +72,17 @@ const DOM = (function () {
     });
   }
 
+  function setNameAttributes(elem, taskName, projectName) {
+    elem.setAttribute("data-task-name", taskName);
+    elem.setAttribute("data-project-name", projectName);
+    return elem;
+  }
+  function getNameAttributes(elem) {
+    const taskName = elem.getAttribute("data-task-name");
+    const projectName = elem.getAttribute("data-project-name");
+    return [taskName, projectName];
+  }
+
   function createTaskContainer(task, color) {
     const container = createDivElement("task");
     const taskTitle = createDivElement("taskTitle", task.title);
@@ -85,34 +94,33 @@ const DOM = (function () {
     const taskDate = createDivElement("taskDate", task.dueDate);
     const taskPriority = createDivElement("taskPriority", task.priority);
 
-    container.style.backgroundColor = color;
+    const taskElements = [
+      taskTitle,
+      taskDescription,
+      taskDate,
+      taskPriority,
+      projectID,
+    ];
 
-    container.appendChild(taskTitle);
-    container.appendChild(taskDescription);
-    container.appendChild(taskDate);
-    container.appendChild(taskPriority);
-    container.appendChild(taskTitle);
-    container.appendChild(projectID);
+    taskElements.forEach((element) => container.appendChild(element));
+
+    container.style.backgroundColor = color;
+    setNameAttributes(container, task.title, task.project);
 
     const favoriteIcon = createIconElement("favoriteIcon", starIcon);
     const editTaskIcon = createIconElement("editTask", editIcon);
     const deleteTaskIcon = createIconElement("deleteTask", deleteIcon);
-
-    const icons = [];
-    icons.push(favoriteIcon, editTaskIcon, deleteTaskIcon);
+    const icons = [favoriteIcon, editTaskIcon, deleteTaskIcon];
 
     if (task.favorite === true) {
       favoriteIcon.classList.add("active");
     }
 
     icons.forEach((icon) => {
-      icon.setAttribute("data-task-name", task.title);
-      icon.setAttribute("data-project-name", task.project);
+      setNameAttributes(icon, task.title, task.project);
       container.append(icon);
       return icon;
     });
-    container.setAttribute("data-task-name", task.title);
-    container.setAttribute("data-project-name", task.project);
 
     editTaskIcon.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -166,8 +174,7 @@ const DOM = (function () {
   }
 
   function deleteTask(deleteIcon) {
-    const taskName = deleteIcon.getAttribute("data-task-name");
-    const projectName = deleteIcon.getAttribute("data-project-name");
+    const [taskName, projectName] = getNameAttributes(deleteIcon);
     const deleteTaskEvent = new CustomEvent("taskDeleted", {
       detail: { taskName: taskName, projectName: projectName },
     });
@@ -175,8 +182,7 @@ const DOM = (function () {
   }
 
   function toggleFavorite(icon) {
-    const taskName = icon.getAttribute("data-task-name");
-    const projectName = icon.getAttribute("data-project-name");
+    const [taskName, projectName] = getNameAttributes(icon);
     const toggle = new CustomEvent("favoriteToggled", {
       detail: { taskName: taskName, projectName: projectName },
     });
@@ -185,7 +191,7 @@ const DOM = (function () {
 
   function changeStatus(status, projName, taskName) {
     const newStatus = new CustomEvent("statusChanged", {
-      detail: { newStatus: status, projName: projName, taskName: taskName },
+      detail: { newStatus: status, projectName: projName, taskName: taskName },
     });
     document.dispatchEvent(newStatus);
   }
@@ -235,6 +241,19 @@ const DOM = (function () {
     container.removeChild(projectDiv);
   }
 
+  function addDeleteEditListeners(deleteBtn, editBtn, projectElement) {
+    deleteBtn.addEventListener("click", function (event) {
+      event.stopPropagation();
+      removeTasks(projectElement);
+      removeProject(projectElement);
+      removeProjectFromList(deleteBtn, projectsContainer);
+    });
+    editBtn.addEventListener("click", function (event) {
+      event.stopPropagation();
+      editProject(projectElement);
+    });
+  }
+
   function appendProject(className, project) {
     const newProjectElement = createProjectElement(className, project.name);
     newProjectElement.style.backgroundColor = project.color;
@@ -242,21 +261,10 @@ const DOM = (function () {
     const deleteBtn = newProjectElement.querySelector(".delete");
     const editBtn = newProjectElement.querySelector(".edit");
     projectsContainer.appendChild(newProjectElement);
-    deleteBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      removeTasks(newProjectElement);
-      removeProject(newProjectElement);
-      removeProjectFromList(deleteBtn, projectsContainer);
-    });
-    editBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      editProject(newProjectElement);
-    });
 
-    newProjectElement.addEventListener("click", () => {
-      // for (let i = 0; i < projectsContainer.children.length; i++) {
-      //   projectsContainer.children[i].style.fontWeight = "normal";
-      // }
+    addDeleteEditListeners(deleteBtn, editBtn, newProjectElement);
+
+    newProjectElement.addEventListener("click", function () {
       const selectedProject = newProjectElement;
       if (selectedProject.style.fontWeight === "bold") {
         selectedProject.style.fontWeight = "normal";
@@ -289,63 +297,59 @@ const DOM = (function () {
     clearContainer(finishedContainer);
   }
 
-  function appendNewTask(project, task) {
-    const container = createTaskContainer(task, project.color);
-    container.setAttribute("data-project-name", project.name);
-    if (task.status === "New") newContainer.appendChild(container);
+  function appendTaskToStatusContainer(task, taskContainer) {
+    if (task.status === "New") newContainer.appendChild(taskContainer);
     else if (task.status === "In progress") {
-      inProgressContainer.appendChild(container);
-    } else finishedContainer.appendChild(container);
-    container.setAttribute("draggable", "true");
+      inProgressContainer.appendChild(taskContainer);
+    } else finishedContainer.appendChild(taskContainer);
+  }
+
+  function addDragListeners(container, task) {
     container.addEventListener("dragstart", function (event) {
       event.dataTransfer.setData("text/plain", task.title);
       dragged = container;
       event.target.classList.add("dragging");
     });
+
     container.addEventListener("dragend", function (event) {
       event.target.classList.remove("dragging");
     });
+  }
+
+  function appendNewTask(project, task) {
+    const container = createTaskContainer(task, project.color);
+    container.setAttribute("data-project-name", project.name);
+    container.setAttribute("draggable", "true");
+    appendTaskToStatusContainer(task, container);
+    addDragListeners(container, task);
   }
 
   function updateTasks(project, tasksArr) {
     tasksArr.forEach((task) => {
       const container = createTaskContainer(task, project.color);
       container.setAttribute("data-task-name", task.title);
-      if (task.status === "New") newContainer.appendChild(container);
-      else if (task.status === "In progress") {
-        inProgressContainer.appendChild(container);
-      } else finishedContainer.appendChild(container);
       container.setAttribute("draggable", "true");
-      container.addEventListener("dragstart", function (event) {
-        event.dataTransfer.setData("text/plain", task.title);
-        dragged = container;
-        event.target.classList.add("dragging");
-      });
-      container.addEventListener("dragend", function (event) {
-        event.target.classList.remove("dragging");
-      });
+      appendTaskToStatusContainer(task, container);
+      addDragListeners(container, task);
     });
   }
+
   function updateDashboard(oldName, project, tasksArr) {
     tasksArr.forEach((task) => {
       taskContainers.forEach((container) => {
         for (const child of container.children) {
           if (child.getAttribute("data-project-name") === oldName) {
             child.style.backgroundColor = project.color;
-            child.setAttribute("data-project-name", project.name);
-
-            child.setAttribute("data-task-name", task.title);
+            setNameAttributes(child, task.title, project.name);
             for (const elem of child.children) {
               if (
                 elem.classList.contains("favoriteIcon") ||
                 elem.classList.contains("editTask") ||
                 elem.classList.contains("deleteTask")
               ) {
-                elem.setAttribute("data-task-name", task.title);
-                elem.setAttribute("data-project-name", project.name);
+                setNameAttributes(elem, task.title, project.name);
               }
             }
-
             const name = child.querySelector(".projectID");
             name.textContent = project.name;
           }

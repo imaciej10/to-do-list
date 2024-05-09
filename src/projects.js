@@ -10,10 +10,6 @@ export default class Project {
     this.tasks.push(task);
   }
 
-  deleteTask() {
-    console.log(`${this.name} has been deleted`);
-  }
-
   filterTasksByDate(condition) {
     this.filteredTasks = this.tasks.filter((task) => condition(task));
   }

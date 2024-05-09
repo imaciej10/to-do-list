@@ -14,7 +14,6 @@ import Project, {
 } from "./projects.js";
 import DOM from "./dom.js";
 import loadMain from "./main.js";
-const tasks = [];
 export const projects = [];
 let tasks1 = [];
 let tasks2 = [];
@@ -57,6 +56,9 @@ const projectsForm = document.querySelector(".newProject");
 const editProjectForm = document.querySelector(".editProject");
 const editTaskForm = document.querySelector(".editTaskForm");
 
+DOM.updateProjectsInForm(projects); /// ???
+DOM.taskMenuEventListeners(handleOptionClick);
+
 function formatDate(date) {
   return date.toISOString().split("T")[0];
 }
@@ -83,6 +85,10 @@ function isDateInRange(date, dateArr) {
 
 function findProjectIndex(projectName) {
   const index = projects.findIndex((project) => project.name === projectName);
+  if (index === -1) {
+    console.error(`Project "${projectName}" not found.`);
+    return null;
+  }
   return index;
 }
 function isToday(date, today) {
@@ -91,6 +97,27 @@ function isToday(date, today) {
 
 function handleOptionClick(id) {
   filterTasksArray(id);
+}
+
+function getTaskAndProjectInfo(event) {
+  return [event.detail.taskName, event.detail.projectName];
+}
+
+function taskFound(project, taskToEdit) {
+  let taskIndex;
+  let found = false;
+  for (let i = 0; i < project.tasks.length; i++) {
+    if (project.tasks[i].title === taskToEdit) {
+      taskIndex = i;
+      found = true;
+    }
+  }
+  if (!found) {
+    console.error(
+      `Task "${taskToEdit}" not found in project "${project.name}".`
+    );
+  }
+  return [taskIndex, found];
 }
 
 function filterTasksArray(param) {
@@ -120,7 +147,6 @@ function filterTasksArray(param) {
     });
   } else if (param === "all") {
     DOM.clearDashboard();
-    console.log(projects);
     projects.forEach((project) => DOM.updateTasks(project, project.tasks));
     return;
   }
@@ -129,37 +155,45 @@ function filterTasksArray(param) {
     DOM.updateTasks(project, project.filteredTasks)
   );
 }
+
 document.addEventListener("DOMContentLoaded", () => {
   tasksForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const newTask = getInputvalues();
     const index = findProjectIndex(newTask.project);
-    projects[index].tasks.push(newTask);
-    tasksForm.reset();
+    const project = projects[index];
+    project.tasks.push(newTask);
     mainElements.closeModal(mainElements.tasksModal);
-    DOM.appendNewTask(projects[index], newTask);
+    DOM.appendNewTask(project, newTask);
+    tasksForm.reset();
   });
 
   projectsForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const newProject = getNewProject();
-    projectsForm.reset();
     mainElements.closeModal(mainElements.projectsModal);
     projects.push(newProject);
     DOM.appendProject("project", newProject);
     DOM.updateProjectsInForm(projects);
+    projectsForm.reset();
   });
 
   editTaskForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const editedTask = getEditedTask();
-    const index = findProjectIndex(projectToEdit);
+    const oldProjectIndex = findProjectIndex(projectToEdit);
+    const project = projects[oldProjectIndex];
 
-    const project = projects[index];
-    for (let i = 0; i < projects[index].tasks.length; i++) {
-      if (project.tasks[i].title === taskToEdit) {
-        project.tasks.splice(i, 1, editedTask);
+    const [taskIndex, found] = taskFound(project, taskToEdit);
+
+    if (projectToEdit !== editedTask.project) {
+      if (found) {
+        project.tasks.splice(taskIndex, 1);
+        const newProjectIndex = findProjectIndex(editedTask.project);
+        projects[newProjectIndex].tasks.push(editedTask);
       }
+    } else if (found) {
+      project.tasks.splice(taskIndex, 1, editedTask);
     }
 
     DOM.clearDashboard();
@@ -174,23 +208,17 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const [newName, newColor] = getEditedProject();
     const index = findProjectIndex(editedProjectName);
-    projects[index].name = newName;
-    projects[index].color = newColor;
-    projects[index].tasks.forEach((task) => (task.project = newName));
+    const project = projects[index];
+    project.name = newName;
+    project.color = newColor;
+    project.tasks.forEach((task) => (task.project = newName));
 
-    DOM.updateDashboard(
-      editedProjectName,
-      projects[index],
-      projects[index].tasks
-    );
-    DOM.editProjectList(projects[index], editedProjectName);
+    DOM.updateDashboard(editedProjectName, project, project.tasks);
+    DOM.editProjectList(project, editedProjectName);
     DOM.updateProjectsInForm(projects);
     editProjectForm.reset();
     mainElements.closeModal(mainElements.editProjectModal);
   });
-
-  DOM.updateProjectsInForm(projects);
-  DOM.taskMenuEventListeners(handleOptionClick);
 
   document.addEventListener("projectEdited", function (event) {
     editedProjectName = event.detail.projectName;
@@ -198,21 +226,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.addEventListener("favoriteToggled", function (event) {
-    const taskName = event.detail.taskName;
-    const projName = event.detail.projectName;
+    const [taskName, projName] = getTaskAndProjectInfo(event);
     const index = findProjectIndex(projName);
     const project = projects[index];
 
     for (let i = 0; i < projects[index].tasks.length; i++) {
       if (project.tasks[i].title === taskName) {
         project.toggleStatus(i);
-        console.log(project.tasks[i].favorite);
       }
     }
   });
   document.addEventListener("projectDeselected", function (event) {
     DOM.clearDashboard();
-    console.log("los");
     projects.forEach((project) => {
       DOM.updateTasks(project, project.tasks);
     });
@@ -229,12 +254,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("statusChanged", function (event) {
     let newStatus = event.detail.newStatus;
     newStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    const [taskName, projName] = getTaskAndProjectInfo(event);
     if (newStatus === "InProgress") newStatus = "In progress";
-    const taskName = event.detail.taskName;
-    const projName = event.detail.projName;
     const index = findProjectIndex(projName);
     const project = projects[index];
-    for (let i = 0; i < projects[index].tasks.length; i++) {
+    for (let i = 0; i < project.tasks.length; i++) {
       if (project.tasks[i].title === taskName)
         project.tasks[i].status = newStatus;
     }
@@ -243,7 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("projectRemoved", function (event) {
     const projectName = event.detail.projectName;
     const index = findProjectIndex(projectName);
-
     if (index !== -1) {
       projects.splice(index, 1);
     }
@@ -251,16 +274,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.addEventListener("taskDeleted", function (event) {
-    const projectName = event.detail.projectName;
-    const taskName = event.detail.taskName;
+    const [taskName, projectName] = getTaskAndProjectInfo(event);
     const index = findProjectIndex(projectName);
     const project = projects[index];
+
     for (let i = 0; i < projects[index].tasks.length; i++) {
       if (project.tasks[i].title === taskName) {
         project.tasks.splice(i, 1);
       }
     }
-    console.log(projects);
     DOM.clearDashboard();
     projects.forEach((project) => {
       DOM.updateTasks(project, project.tasks);
@@ -268,8 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.addEventListener("taskEdited", function (event) {
-    projectToEdit = event.detail.projectName;
-    taskToEdit = event.detail.taskName;
+    [taskToEdit, projectToEdit] = getTaskAndProjectInfo(event);
   });
 
   addTask.addEventListener("click", () => {
