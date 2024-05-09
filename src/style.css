@@ -16,7 +16,24 @@
 
 li:hover {
   color: white;
+  cursor: pointer;
 }
+
+.tasks > ul > li::after {
+  content: "";
+  position: absolute;
+  background-color: red;
+  width: 0%;
+  height: 3px;
+  bottom: -6px;
+  left: 0;
+  transition: 0.5s;
+}
+
+.tasks > ul > li:hover::after {
+  width: 100%;
+}
+
 body {
   height: 100vh;
   width: 100vw;
@@ -40,6 +57,7 @@ body {
   width: 90px;
   height: auto;
 }
+
 /* sidebar */
 .sidebar {
   background-color: var(--sidebar-color);
@@ -52,9 +70,10 @@ body {
   background-color: rgba(20, 202, 140, 0.5);
 }
 .tasks {
-  height: 40%;
+  height: 45%;
   width: 100%;
-  padding: 1rem;
+  background-color: rgb(128, 128, 128, 0.1);
+  border-radius: 1.5rem;
 }
 
 .activeFilter {
@@ -132,9 +151,14 @@ body {
 
 ul {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 li {
   margin-top: 0.6rem;
+  position: relative;
+  padding: 0.2rem 0.5rem;
 }
 
 .favoriteIcon {
@@ -220,6 +244,13 @@ li {
   column-gap: 1rem;
 }
 
+.statusDiv {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 .new {
   border: 3px dashed orange;
   border-radius: 1rem;
@@ -240,6 +271,13 @@ li {
 .finished {
   border: 3px dotted green;
   border-radius: 1rem;
+}
+
+#newIcon,
+#inProgressIcon,
+#finishedIcon {
+  height: 2.5rem;
+  width: auto;
 }
 
 /* footer */
@@ -266,7 +304,7 @@ li {
 
 .tasksModal,
 .editTasksModal {
-  height: 75vh;
+  height: 850px;
   width: 30vw;
   z-index: 3;
   top: 50%;
@@ -380,7 +418,6 @@ input[id="isFavorite"] {
 }
 button.exit {
   position: relative;
-  grid-area: 1 / 1 / 2 / 2;
   top: -7%;
   left: 48%;
   border: none;
@@ -412,18 +449,32 @@ button.exit {
 
 .projectsModal,
 .editProjectModal {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   z-index: 5;
-  width: 20vw;
-  height: 25vh;
+  width: 30vw;
+  min-width: 300px;
+  height: 370px;
   background-color: white;
   padding: 1rem 0.5rem;
   border: 1px solid black;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+}
+
+#exitEditProjects,
+#exitProjects {
+  position: relative;
+  height: 50px;
+  width: 50px;
+  top: 0%;
+  left: 80%;
+  transition: 200ms ease-in-out;
+  border: none;
+  background: none;
+  font-size: 3rem;
 }
 
 .projectsTitle {
@@ -436,17 +487,22 @@ button.exit {
 .color {
   display: flex;
   width: 100%;
-  border: 1px black solid;
+  padding: 0.5rem 1rem;
+  justify-content: space-between;
 }
-#color-picker {
+
+#color-picker,
+#editedColor {
   width: 20%;
   align-self: end;
   display: block;
 }
-form.newProject {
+form.newProject,
+form.editProject {
   display: flex;
   flex-direction: column;
-  row-gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -456,12 +512,16 @@ form.newProject {
   transition: 200ms ease-in-out;
 }
 
-.projectsModal .exit,
-.exitTaskEdit {
-  position: relative;
-  height: 50px;
-  width: auto;
-  top: 0%;
-  right: 0%;
-  transition: 200ms ease-in-out;
+.projectModalBtn {
+  margin-bottom: 0;
+}
+
+.tasksBtn,
+.projectModalBtn {
+  border-radius: 0.5rem;
+  padding: 0.4rem 2rem;
+  font-size: 1.5rem;
+  border: 1px black solid;
+  color: white;
+  background-color: skyblue;
 }
