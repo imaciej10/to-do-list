@@ -133,8 +133,8 @@
         </form>
       </div>
       <div class="projectsModal">
-        <div class="projectsTitle">New Project</div>
         <button class="exit" id="exitProjects">&times;</button>
+        <div class="projectsTitle">New Project</div>
         <form action="results.html" method="get" class="newProject">
           <label for="project">Name</label
           ><input
@@ -149,12 +149,12 @@
             <label for="color-picker">Color:</label>
             <input type="color" value="#ff0000" id="color-picker" />
           </div>
-          <button>Add</button>
+          <button class="projectModalBtn">Add</button>
         </form>
       </div>
       <div class="editProjectModal">
-        <div class="projectsTitle">Edit Project</div>
         <button class="exit" id="exitEditProjects">&times;</button>
+        <div class="projectsTitle">Edit Project</div>
         <form action="results.html" method="get" class="editProject">
           <label for="editedTitle">Name</label
           ><input
@@ -169,7 +169,7 @@
             <label for="editedColor">Color:</label>
             <input type="color" value="#ff0000" id="editedColor" />
           </div>
-          <button>Change</button>
+          <button class="projectModalBtn">Change</button>
         </form>
       </div>
       <div class="projects">
@@ -180,9 +180,30 @@
       </div>
     </div>
     <div class="main">
-      <h3 class="statusTitle" id="newTitle">New</h3>
-      <h3 class="statusTitle" id="inProgressTitle">In progress</h3>
-      <h3 class="statusTitle" id="finishedTitle">Finished</h3>
+      <div class="statusDiv">
+        <h3 class="statusTitle" id="newTitle">New</h3>
+        <img
+          src="../src/img/file-done-svgrepo-com(1).svg"
+          alt="newIcon"
+          id="newIcon"
+        />
+      </div>
+      <div class="statusDiv">
+        <h3 class="statusTitle" id="inProgressTitle">In progress</h3>
+        <img
+          src="../src/img/in-progress-svgrepo-com(1).svg"
+          alt="inProgressIcon"
+          id="inProgressIcon"
+        />
+      </div>
+      <div class="statusDiv">
+        <h3 class="statusTitle" id="finishedTitle">Finished</h3>
+        <img
+          src="../src/img/file-done-svgrepo-com(1).svg"
+          alt="finishedIcon"
+          id="finishedIcon"
+        />
+      </div>
       <div class="new taskContainer dropzone"></div>
       <div class="inProgress taskContainer dropzone"></div>
       <div class="finished taskContainer dropzone"></div>
