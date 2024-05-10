@@ -1,6 +1,7 @@
 import editIcon from "./img/edit.svg";
 import deleteIcon from "./img/delete.svg";
 import starIcon from "./img/star.svg";
+import bellIcon from "./img/alert.svg";
 import Task, { populateTaskForm } from "./tasks.js";
 import { populateProjectForm } from "./projects.js";
 import { projects } from "./index.js";
@@ -102,6 +103,8 @@ const DOM = (function () {
     const projectID = createDivElement("projectID", task.project);
     const taskDate = createDivElement("taskDate", task.dueDate);
     const taskPriority = createDivElement("taskPriority", task.priority);
+    const taskNotes = createDivElement("taskNotes", task.notes);
+    const urgentIcon = createIconElement("urgentIcon", bellIcon);
 
     const taskElements = [
       taskTitle,
@@ -109,6 +112,7 @@ const DOM = (function () {
       taskDate,
       taskPriority,
       projectID,
+      taskNotes,
     ];
 
     taskElements.forEach((element) => container.appendChild(element));
@@ -121,6 +125,9 @@ const DOM = (function () {
     const deleteTaskIcon = createIconElement("deleteTask", deleteIcon);
     const icons = [favoriteIcon, editTaskIcon, deleteTaskIcon];
 
+    if (taskPriority.textContent === "High") {
+      container.append(urgentIcon);
+    }
     if (task.favorite === true) {
       favoriteIcon.classList.add("active");
     }
@@ -249,6 +256,19 @@ const DOM = (function () {
     const projectDiv = btn.parentNode;
     container.removeChild(projectDiv);
   }
+  function resetSelecedProjects() {
+    const projectContainers = document.querySelectorAll(".project");
+    const projectNames = [];
+    projects.forEach((project) => projectNames.push(project.name));
+    Array.from(projectContainers).forEach((projectContainer) => {
+      if (
+        projectNames.includes(
+          projectContainer.getAttribute("data-project-name")
+        )
+      )
+        projectContainer.classList.remove("projectSelected");
+    });
+  }
 
   function addDeleteEditListeners(
     deleteBtn,
@@ -282,11 +302,12 @@ const DOM = (function () {
 
     newProjectElement.addEventListener("click", function () {
       const selectedProject = newProjectElement;
-      if (selectedProject.style.fontWeight === "bold") {
-        selectedProject.style.fontWeight = "normal";
+      resetSelecedProjects();
+      if (selectedProject.classList.contains("projectSelected")) {
+        selectedProject.classList.remove("projectSelected");
         DeselectProject(newProjectElement);
       } else {
-        selectedProject.style.fontWeight = "bold";
+        selectedProject.classList.add("projectSelected");
         SelectProject(newProjectElement);
       }
     });

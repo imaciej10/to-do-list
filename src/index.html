@@ -8,12 +8,151 @@
   </head>
   <body>
     <div class="header">
-      <p>To Do List</p>
+      <p>To do organizer</p>
       <img
         src="../src/img/to-do-list-svgrepo-com.svg"
         class="toDoLogo"
         alt="To-Do Icon"
       />
+    </div>
+    <div id="tasksOverlay"></div>
+    <div class="tasksModal">
+      <button class="exit exitTasksModal" data-close-button>&times;</button>
+      <div class="title">New Task</div>
+      <form class="newTask" action="results.html">
+        <label for="name" aria-label="required">Name</label
+        ><input
+          type="text"
+          id="name"
+          placeholder="Fix espresso machine"
+          minlength="3"
+          maxlength="28"
+          aria-label="required"
+          required
+        /><label for="description">Description</label
+        ><input type="text" id="description" maxlength="35" /><label for="date"
+          >Due date</label
+        ><input type="date" id="date" placeholder="26/05/2024" />
+        <fieldset class="priority">
+          <legend>Select priority</legend>
+          <input
+            type="radio"
+            id="priority1"
+            value="Low"
+            name="priority"
+            checked
+          />
+          <label for="priority1">Low</label>
+          <input type="radio" id="priority2" value="Medium" name="priority" />
+          <label for="priority2">Medium</label>
+          <input type="radio" id="priority3" value="High" name="priority" />
+          <label for="priority3">High</label>
+        </fieldset>
+        <label for="status">Status</label>
+        <select name="status" id="status">
+          <option value="New">New</option>
+          <option value="In progress">In progress</option>
+          <option value="Finished">Finished</option>
+        </select>
+        <label for="projectName">Select project</label>
+        <select name="project" id="projectName"></select>
+        <label for="notes">Notes</label
+        ><textarea id="notes" name="notes" maxlength="90"></textarea>
+        <label for="isFavorite">Favorite</label
+        ><input type="checkbox" id="isFavorite" />
+        <button id="tasksAdd" class="tasksBtn" type="submit">Add</button>
+      </form>
+    </div>
+    <div class="editTasksModal">
+      <button class="exitTaskEdit exit" data-close-button>&times;</button>
+      <div class="title">Edit Task</div>
+      <form class="editTaskForm" action="results.html">
+        <label for="name" aria-label="required">Name</label
+        ><input
+          type="text"
+          id="name"
+          placeholder="Fix espresso machine"
+          minlength="3"
+          maxlength="28"
+          aria-label="required"
+          required
+        /><label for="description">Description</label
+        ><input type="text" id="description" maxlength="35" /><label for="date"
+          >Due date</label
+        ><input type="date" id="date" placeholder="26/05/2024" />
+        <fieldset class="priority">
+          <legend>Select priority</legend>
+          <input
+            type="radio"
+            id="priority1"
+            value="Low"
+            name="priority"
+            checked
+          />
+          <label for="priority1">Low</label>
+          <input type="radio" id="priority2" value="Medium" name="priority" />
+          <label for="priority2">Medium</label>
+          <input type="radio" id="priority3" value="High" name="priority" />
+          <label for="priority3">High</label>
+        </fieldset>
+        <label for="status">Status</label>
+        <select name="status" id="status">
+          <option value="New">New</option>
+          <option value="In progress">In progress</option>
+          <option value="Finished">Finished</option>
+        </select>
+        <label for="projectName">Select project</label>
+        <select name="project" id="projectName"></select>
+        <label for="notes">Notes</label
+        ><textarea id="notes" name="notes" maxlength="90"></textarea>
+        <label for="isFavorite">Favorite</label
+        ><input type="checkbox" id="isFavorite" />
+        <button id="tasksAdd" class="tasksBtn" type="submit">Update</button>
+      </form>
+    </div>
+    <div class="projectsModal">
+      <div class="projectsTitle">
+        New Project<button class="exit" id="exitProjects">&times;</button>
+      </div>
+      <form action="results.html" method="get" class="newProject">
+        <label for="project">Name</label
+        ><input
+          type="text"
+          id="project"
+          aria-label="required"
+          placeholder="Organize workspace"
+          required
+          minlength="5"
+          maxlength="20"
+        />
+        <div class="color">
+          <label for="color-picker">Color:</label>
+          <input type="color" value="#ff0000" id="color-picker" />
+        </div>
+        <button class="projectModalBtn">Add</button>
+      </form>
+    </div>
+    <div class="editProjectModal">
+      <div class="projectsTitle">
+        Edit Project
+        <button class="exit" id="exitEditProjects">&times;</button>
+      </div>
+      <form action="results.html" method="get" class="editProject">
+        <label for="editedTitle">Name</label
+        ><input
+          type="text"
+          id="editedTitle"
+          aria-label="required"
+          required
+          minlength="5"
+          maxlength="20"
+        />
+        <div class="color">
+          <label for="editedColor">Color:</label>
+          <input type="color" value="#ff0000" id="editedColor" />
+        </div>
+        <button class="projectModalBtn">Change</button>
+      </form>
     </div>
     <div class="sidebar">
       <div class="tasks">
@@ -35,143 +174,7 @@
           </li>
         </ul>
       </div>
-      <div id="tasksOverlay"></div>
-      <div class="tasksModal">
-        <div class="title">New Task</div>
-        <button class="exit" data-close-button>&times;</button>
-        <form class="newTask" action="results.html">
-          <label for="name" aria-label="required">Name</label
-          ><input
-            type="text"
-            id="name"
-            placeholder="Fix espresso machine"
-            minlength="3"
-            maxlength="28"
-            aria-label="required"
-            required
-          /><label for="description">Description</label
-          ><input type="text" id="description" maxlength="35" /><label
-            for="date"
-            >Due date</label
-          ><input type="date" id="date" placeholder="26/05/2024" />
-          <fieldset class="priority">
-            <legend>Select priority</legend>
-            <input
-              type="radio"
-              id="priority1"
-              value="Low"
-              name="priority"
-              checked
-            />
-            <label for="priority1">Low</label>
-            <input type="radio" id="priority2" value="Medium" name="priority" />
-            <label for="priority2">Medium</label>
-            <input type="radio" id="priority3" value="High" name="priority" />
-            <label for="priority3">High</label>
-          </fieldset>
-          <label for="status">Status</label>
-          <select name="status" id="status">
-            <option value="New">New</option>
-            <option value="In progress">In progress</option>
-            <option value="Finished">Finished</option>
-          </select>
-          <label for="projectName">Select project</label>
-          <select name="project" id="projectName"></select>
-          <label for="notes">Notes</label
-          ><textarea id="notes" name="notes" maxlength="40"></textarea>
-          <label for="isFavorite">Favorite</label
-          ><input type="checkbox" id="isFavorite" />
-          <button id="tasksAdd" class="tasksBtn" type="submit">Add</button>
-        </form>
-      </div>
-      <div class="editTasksModal">
-        <div class="title">Edit Task</div>
-        <button class="exitTaskEdit exit" data-close-button>&times;</button>
-        <form class="editTaskForm" action="results.html">
-          <label for="name" aria-label="required">Name</label
-          ><input
-            type="text"
-            id="name"
-            placeholder="Fix espresso machine"
-            minlength="3"
-            maxlength="28"
-            aria-label="required"
-            required
-          /><label for="description">Description</label
-          ><input type="text" id="description" maxlength="35" /><label
-            for="date"
-            >Due date</label
-          ><input type="date" id="date" placeholder="26/05/2024" />
-          <fieldset class="priority">
-            <legend>Select priority</legend>
-            <input
-              type="radio"
-              id="priority1"
-              value="Low"
-              name="priority"
-              checked
-            />
-            <label for="priority1">Low</label>
-            <input type="radio" id="priority2" value="Medium" name="priority" />
-            <label for="priority2">Medium</label>
-            <input type="radio" id="priority3" value="High" name="priority" />
-            <label for="priority3">High</label>
-          </fieldset>
-          <label for="status">Status</label>
-          <select name="status" id="status">
-            <option value="New">New</option>
-            <option value="In progress">In progress</option>
-            <option value="Finished">Finished</option>
-          </select>
-          <label for="projectName">Select project</label>
-          <select name="project" id="projectName"></select>
-          <label for="notes">Notes</label
-          ><textarea id="notes" name="notes" maxlength="40"></textarea>
-          <label for="isFavorite">Favorite</label
-          ><input type="checkbox" id="isFavorite" />
-          <button id="tasksAdd" class="tasksBtn" type="submit">Update</button>
-        </form>
-      </div>
-      <div class="projectsModal">
-        <button class="exit" id="exitProjects">&times;</button>
-        <div class="projectsTitle">New Project</div>
-        <form action="results.html" method="get" class="newProject">
-          <label for="project">Name</label
-          ><input
-            type="text"
-            id="project"
-            aria-label="required"
-            required
-            minlength="5"
-            maxlength="20"
-          />
-          <div class="color">
-            <label for="color-picker">Color:</label>
-            <input type="color" value="#ff0000" id="color-picker" />
-          </div>
-          <button class="projectModalBtn">Add</button>
-        </form>
-      </div>
-      <div class="editProjectModal">
-        <button class="exit" id="exitEditProjects">&times;</button>
-        <div class="projectsTitle">Edit Project</div>
-        <form action="results.html" method="get" class="editProject">
-          <label for="editedTitle">Name</label
-          ><input
-            type="text"
-            id="editedTitle"
-            aria-label="required"
-            required
-            minlength="5"
-            maxlength="20"
-          />
-          <div class="color">
-            <label for="editedColor">Color:</label>
-            <input type="color" value="#ff0000" id="editedColor" />
-          </div>
-          <button class="projectModalBtn">Change</button>
-        </form>
-      </div>
+
       <div class="projects">
         <ul>
           <li id="addProject" class="projectsList">Add Project</li>
@@ -183,7 +186,7 @@
       <div class="statusDiv">
         <h3 class="statusTitle" id="newTitle">New</h3>
         <img
-          src="../src/img/file-done-svgrepo-com(1).svg"
+          src="../src/img/new-document-svgrepo-com.svg"
           alt="newIcon"
           id="newIcon"
         />

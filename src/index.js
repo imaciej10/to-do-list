@@ -46,6 +46,12 @@ tasks1.forEach((task) => proj1.addTask(task));
 tasks2.forEach((task) => proj2.addTask(task));
 
 projects.push(proj1, proj2);
+
+// const storedProjectsJSON = localStorage.getItem("projects");
+// const storedProjects = storedProjectsJSON
+//   ? JSON.parse(storedProjectsJSON)
+//   : projects.push(storedProjects);
+
 projects.forEach((project) => {
   DOM.appendProject("project", project);
   DOM.updateTasks(project, project.tasks);
@@ -184,6 +190,9 @@ document.addEventListener("DOMContentLoaded", () => {
     DOM.appendProject("project", newProject);
     DOM.updateProjectsInForm(projects);
     projectsForm.reset();
+    // localStorage.setItem("projects", JSON.stringify(projects));
+    // const storedProjects = JSON.parse(localStorage.getItem("projects"));
+    // console.log(storedProjects);
   });
 
   editTaskForm.addEventListener("submit", function (event) {

@@ -147,7 +147,7 @@ export const getProj1Tasks = function () {
     "Fix espresso machine"
   );
   const task2 = new Task(
-    "Do some descalling",
+    "Do some descaling",
     "Easy peasy",
     setDate("this week"),
     "Medium",

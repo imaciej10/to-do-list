@@ -4,14 +4,30 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: "Poppins";
+  src: url("./fonts/Poppins-Regular.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./fonts/Manrope[wght].ttf") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
-  font-family: "Roboto";
+  font-family: "Manrope", "Iowan Old Style", "Palatino Linotype",
+    "URW Palladio L", P052, serif;
+  font-weight: normal;
   font-size: 18px;
   background-color: gray;
   color: black;
-  --new-color: #9ba1db;
-  --inProgress-color: #5463d4;
-  --finished-color: #1d2fd1;
+  --new-color: #818cdd;
+  --inProgress-color: #4556d8;
+  --finished-color: #091dcf;
   --header-color: #c8c8f3;
   --main-color: #f4f2f2;
   --sidebar-color: #a5a5ca;
@@ -24,6 +40,26 @@ li:hover {
   cursor: pointer;
 }
 
+input#name:valid,
+input#project:valid,
+input#project:valid {
+  border: 2px solid green;
+  outline: none;
+}
+
+input#name:invalid,
+input#project:invalid {
+  border: 2px solid red;
+  outline: none;
+}
+
+input#name:focus,
+input#description:focus,
+textarea:focus,
+input#project:focus,
+input[type="text"]:focus {
+  outline: none;
+}
 li::after {
   content: "";
   position: absolute;
@@ -48,7 +84,7 @@ body {
 
 .header {
   background-color: var(--header-color);
-  font-size: 3rem;
+  font-size: 3.2rem;
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -56,15 +92,21 @@ body {
   height: 100%;
   width: 100%;
   grid-area: 1 / 1 / 2 / 4;
+  text-transform: uppercase;
+  font-family: "Poppins";
+  letter-spacing: 0.1rem;
+  user-select: none;
 }
 
 .toDoLogo {
   width: auto;
-  height: 4rem;
+  height: 3.5rem;
 }
 
 /* sidebar */
 .sidebar {
+  display: flex;
+  flex-direction: column;
   background-color: var(--sidebar-color);
   grid-area: 2 / 1 / 4 / 2;
   font-size: 1.5rem;
@@ -75,12 +117,13 @@ body {
   background-color: rgb(238, 63, 110, 0.3);
 }
 .tasks {
-  height: 45%;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
 .activeFilter {
-  color: red;
+  color: var(--accent-color);
 }
 .taskContainer {
   display: flex;
@@ -93,18 +136,18 @@ body {
   user-select: none;
   position: relative;
   height: 10%;
-  border: 2px solid black;
+  border: none;
   font-size: 1.3rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0.7rem;
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 600ms;
-  border-radius: 0.5rem;
+  border-radius: 0.7rem;
   align-items: center;
   justify-items: center;
 }
 .task:hover {
-  grid-template: repeat (4, 1fr) / repeat (2, 1fr);
+  grid-template: repeat (6, 1fr) / repeat (2, 1fr);
   height: 50%;
 }
 
@@ -114,40 +157,65 @@ body {
 
 #addProject {
   display: flex;
+  font-size: 1.7rem;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 700;
+  border-radius: 1rem;
 }
 
 .task > * {
   visibility: hidden;
+  grid-column: 1/3;
 }
 
 .taskTitle {
-  grid-area: 1 / 1 / 2 /3;
+  grid-row: 1/2;
+  grid-column: 1/3;
   visibility: visible;
+  justify-self: center;
+  align-self: center;
+
+  font-weight: 500;
 }
 
 .taskDescription {
-  grid-area: 2 / 1 / 3 /3;
+  grid-row: 2/3;
   justify-self: start;
+  font-size: 1.2rem;
 }
 .taskPriority {
-  grid-area: 3 / 1 / 4 /3;
-  font-size: 1rem;
-  justify-self: start;
+  grid-row: 3/4;
+  grid-column: 2/3;
+  font-size: 1.3rem;
+  justify-self: center;
 }
 .taskDate {
-  grid-area: 3 / 2 / 4/ 3;
+  grid-row: 3/4;
+  grid-column: 1/2;
+  justify-self: start;
+  font-size: 1.3rem;
 }
 
 .projectID {
-  grid-area: 4 / 1 / 5/ 2;
+  grid-row: 5/6;
+  grid-column: 1/2;
 }
-.taskFavorite {
-  grid-area: 4 / 2 / 5/ 3;
-  justify-self: end;
+
+.taskNotes {
+  grid-row: 4/5;
+  font-size: 1rem;
+  font-style: italic;
+  justify-self: start;
+  overflow: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  max-width: 100%;
 }
+
 .projects {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
   height: 50%;
   width: 100%;
 }
@@ -162,6 +230,7 @@ li {
   margin-top: 0.6rem;
   position: relative;
   padding: 0.2rem 0.5rem;
+  letter-spacing: 0.1rem;
 }
 
 .favoriteIcon {
@@ -169,14 +238,23 @@ li {
   visibility: hidden;
   opacity: 0.5;
   background-color: none;
-  top: 0%;
-  right: 0%;
+  top: 0px;
+  right: -10px;
   height: 26px;
   width: auto;
   z-index: 5;
   cursor: pointer;
 }
 
+.urgentIcon {
+  width: 2rem;
+  height: auto;
+  position: absolute;
+  top: 0px;
+  left: -15px;
+  z-index: 5;
+  visibility: visible;
+}
 .favoriteIcon.active {
   visibility: visible;
   opacity: 1;
@@ -188,18 +266,18 @@ li {
   visibility: hidden;
   opacity: 0.5;
   background-color: none;
-  top: 85%;
+  bottom: 1rem;
   height: 30px;
   width: auto;
   z-index: 5;
   cursor: pointer;
 }
 .editTask {
-  right: 18%;
+  right: 1.8rem;
 }
 
 .deleteTask {
-  right: 3%;
+  right: -0.2rem;
 }
 
 .projectsContainer {
@@ -209,7 +287,7 @@ li {
   display: flex;
   align-items: center;
   flex-direction: column;
-  row-gap: 0.5rem;
+  row-gap: 1rem;
 }
 
 .project {
@@ -217,15 +295,50 @@ li {
   display: grid;
   align-items: center;
   grid-template-columns: 5fr 1rem 1fr 1fr;
-  border: 3px solid;
+  border: 4px solid;
   padding: 0.3rem 0.3rem 0.3rem 0.7rem;
   width: 100%;
   border-radius: 0.7rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   user-select: none;
   cursor: pointer;
 }
 
+.project::after {
+  height: 0%;
+  content: "";
+  position: absolute;
+}
+
+.project::before {
+  height: 0%;
+  content: "";
+  position: absolute;
+}
+
+.projectSelected {
+  font-weight: bold;
+  transform: scale(1.02);
+}
+.projectSelected:hover::after {
+  height: 100%;
+  width: 3px;
+  right: -8%;
+}
+
+.projectSelected:hover::before {
+  width: 3px;
+  left: -8%;
+}
+
+.projectSelected::before,
+.projectSelected::after {
+  transition: 0.3s ease-in-out;
+  background-color: var(--accent-color);
+  content: "";
+  position: absolute;
+  height: 100%;
+}
 .edit,
 .delete {
   width: 30px;
@@ -250,6 +363,7 @@ li {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 10% auto;
   column-gap: 1rem;
+  overflow: auto;
 }
 
 .statusDiv {
@@ -296,6 +410,7 @@ li {
 #finishedIcon {
   height: 2.5rem;
   width: auto;
+  user-select: none;
 }
 
 /* footer */
@@ -323,13 +438,11 @@ li {
 a {
   display: inline-block;
 }
-.tasksModal {
-  position: fixed;
-}
 
 .tasksModal,
 .editTasksModal {
-  height: 850px;
+  height: auto;
+  position: absolute;
   width: 30vw;
   z-index: 3;
   top: 50%;
@@ -357,17 +470,17 @@ a {
   transform: translate(-50%, -50%) scale(1);
   transition: 200ms ease-in-out;
 }
-
 .title {
-  margin-bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  letter-spacing: 0.1rem;
 }
 .newTask,
 .editTaskForm {
-  margin-top: -60px;
   display: grid;
   grid-template: repeat(12, 0.4fr) / 1fr 1fr;
   justify-items: center;
@@ -379,17 +492,23 @@ label {
   grid-column: 1/3;
   height: auto;
   user-select: none;
+  font-size: 1.4rem;
 }
 
+legend {
+  font-size: 1.4rem;
+}
 label[for="priority1"],
 label[for="priority2"],
 label[for="priority3"] {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+  user-select: auto;
 }
 
 input {
   width: 80%;
-  padding: 0.6rem;
+  padding: 0.8rem;
   font-size: 1rem;
   grid-column: 1/3;
 }
@@ -398,6 +517,9 @@ input[type="date"] {
   padding: 1rem;
 }
 
+input[type="radio"] {
+  cursor: pointer;
+}
 select {
   grid-column: 1/3;
   width: 80%;
@@ -408,18 +530,12 @@ button#tasksAdd {
   grid-column: 1/3;
 }
 
-button {
-  font-size: 1.3rem;
-  padding: 0.7rem 1.7rem;
-}
-
 .priority {
   display: flex;
   align-items: center;
   width: 80%;
   grid-column: 1/3;
   border: none;
-  user-select: none;
 }
 
 .dragging {
@@ -434,22 +550,26 @@ textarea {
   min-width: 250px;
   max-height: 70px;
   max-width: 80%;
+  resize: vertical;
 }
 label[for="isFavorite"] {
   grid-area: 10 /1/ 11/ 2;
 }
 input[id="isFavorite"] {
   grid-area: 10 / 2 / 11 / 3;
+  cursor: pointer;
 }
 button.exit {
   position: relative;
-  top: -7%;
-  left: 48%;
   border: none;
   background: none;
   font-size: 2rem;
-  width: 30px;
+  height: 50px;
+  width: 50px;
   height: auto;
+  cursor: pointer;
+  padding: 1rem;
+  font-size: 3rem;
 }
 
 #tasksOverlay {
@@ -463,6 +583,7 @@ button.exit {
   right: 0;
   bottom: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 #tasksOverlay.active {
@@ -481,53 +602,54 @@ button.exit {
   z-index: 5;
   width: 30vw;
   min-width: 300px;
-  height: 370px;
+  height: auto;
   background-color: white;
   padding: 1rem 0.5rem;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-}
-
-#exitEditProjects,
-#exitProjects {
-  position: relative;
-  height: 50px;
-  width: 50px;
-  top: 0%;
-  left: 80%;
   transition: 200ms ease-in-out;
-  border: none;
-  background: none;
-  font-size: 3rem;
 }
 
 .projectsTitle {
   display: flex;
+  position: relative;
   justify-content: center;
+  align-items: center;
   width: 100%;
-  font-size: 1.8rem;
+  height: 100%;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+#exitProjects,
+#exitEditProjects {
+  margin-left: auto;
+  position: absolute;
+  top: 35;
+  right: 0;
 }
 
 .color {
   display: flex;
   width: 100%;
+  height: 5rem;
   padding: 0.2rem 0.5rem;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
 }
 
 #color-picker,
 #editedColor {
-  width: 2rem;
-  height: 100%;
+  margin-left: 2rem;
+  width: 3rem;
+  height: 3rem;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  align-self: end;
-  border: none;
   cursor: pointer;
-  border-radius: 2rem;
   padding: 0;
+  background: none;
 }
 
 form.newProject,
@@ -535,14 +657,13 @@ form.editProject {
   display: flex;
   flex-direction: column;
   padding: 0.5rem 1rem;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
 }
 
 .projectsModal.active,
 .editProjectModal.active {
   transform: translate(-50%, -50%) scale(1);
-  transition: 200ms ease-in-out;
 }
 
 .projectModalBtn {
@@ -551,13 +672,53 @@ form.editProject {
 
 .tasksBtn,
 .projectModalBtn {
-  border-radius: 0.5rem;
-  padding: 0.4rem 2rem;
-  font-size: 1.5rem;
+  border-radius: 1rem;
+  padding: 0.5rem 2.1rem;
+  font-size: 1.7rem;
   color: white;
   font-weight: 500;
   background-color: var(--accent-color);
   border: none;
   outline: none;
   cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* Modal-form styling */
+.tasksModal,
+.editTasksModal,
+.projectsModal,
+.editProjectModal {
+  background-color: var(--sidebar-color);
+  color: white;
+}
+
+.exit.exitTaskEdit,
+.exit.exitTasksModal {
+  position: absolute;
+  left: 85%;
+  top: 0%;
+  padding: 0;
+  margin: 0;
+  height: 10px;
+  z-index: 5;
+}
+
+input,
+select,
+textarea {
+  border-radius: 0.7rem;
+  font-size: 1.2rem;
+  border: none;
+  background-color: var(--main-color);
+}
+
+textarea {
+  font-size: 1rem;
+}
+label[for="priority1"],
+label[for="priority2"],
+label[for="priority3"],
+input[type="radio"] {
+  margin-top: 0.5rem;
 }
