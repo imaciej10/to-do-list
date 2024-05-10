@@ -3,13 +3,15 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./src/index.js", // Assuming you only have one entry point
+  entry: {
+    index: "./src/index.js",
+    main: "./src/main.js",
+  },
   devtool: "inline-source-map",
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
-    publicPath: "/", // Set your desired publicPath here
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -25,6 +27,7 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
+
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
