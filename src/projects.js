@@ -27,6 +27,9 @@ export default class Project {
   toggleStatus(index) {
     this.tasks[index].favorite = !this.tasks[index].favorite;
   }
+  copyTasks(array) {
+    this.tasks = array;
+  }
 }
 
 export const getNewProject = function () {

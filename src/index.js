@@ -51,7 +51,16 @@ const storedProjects = storedProjectsJSON ? JSON.parse(storedProjectsJSON) : [];
 if (storedProjects.length === 0) {
   projects.push(proj1, proj2);
 } else {
-  storedProjects.forEach((project) => projects.push(project));
+  storedProjects.forEach((storedProject) => {
+    const project = new Project(
+      storedProject.name,
+      storedProject.color,
+      storedProject.tasks,
+      storedProject.filteredTasks
+    );
+    project.copyTasks(storedProject.tasks);
+    projects.push(project);
+  });
 }
 
 projects.forEach((project) => {
@@ -147,7 +156,7 @@ function taskFound(project, taskToEdit) {
 
 function filterTasksArray(param) {
   const [today, thisWeek] = getDates();
-
+  console.log(projects);
   if (param === "thisWeek") {
     projects.forEach((project) => {
       project.filterTasksByDate((task) =>
@@ -326,7 +335,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   addTask.addEventListener("click", () => {
-    console.log(tasksCount());
     if (tasksCount() >= 12) {
       alert("Can't add more than twelve tasks!");
       return;
