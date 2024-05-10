@@ -8,29 +8,34 @@
   font-family: "Roboto";
   font-size: 18px;
   background-color: gray;
-  --header-color: #bae6fd;
-  --main-color: #fef9c3;
-  --sidebar-color: #93c5fd;
-  --footer-color: #60a5fa;
+  color: black;
+  --new-color: #9ba1db;
+  --inProgress-color: #5463d4;
+  --finished-color: #1d2fd1;
+  --header-color: #c8c8f3;
+  --main-color: #f4f2f2;
+  --sidebar-color: #a5a5ca;
+  --footer-color: #d58d7e;
+  --accent-color: #ee3f6e;
 }
 
 li:hover {
-  color: white;
+  color: var(--accent-color);
   cursor: pointer;
 }
 
-.tasks > ul > li::after {
+li::after {
   content: "";
   position: absolute;
-  background-color: red;
+  background-color: var(--accent-color);
   width: 0%;
   height: 3px;
   bottom: -6px;
   left: 0;
-  transition: 0.5s;
+  transition: 0.4s;
 }
 
-.tasks > ul > li:hover::after {
+li:hover::after {
   width: 100%;
 }
 
@@ -38,7 +43,7 @@ body {
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template: 1fr 5fr 1fr / 1fr 3fr;
+  grid-template: 1fr 8fr 1fr / 1fr 3fr;
 }
 
 .header {
@@ -54,8 +59,8 @@ body {
 }
 
 .toDoLogo {
-  width: 90px;
-  height: auto;
+  width: auto;
+  height: 4rem;
 }
 
 /* sidebar */
@@ -67,13 +72,11 @@ body {
 }
 
 .dropzone.dragover {
-  background-color: rgba(20, 202, 140, 0.5);
+  background-color: rgb(238, 63, 110, 0.3);
 }
 .tasks {
   height: 45%;
   width: 100%;
-  background-color: rgb(128, 128, 128, 0.1);
-  border-radius: 1.5rem;
 }
 
 .activeFilter {
@@ -102,7 +105,7 @@ body {
 }
 .task:hover {
   grid-template: repeat (4, 1fr) / repeat (2, 1fr);
-  height: 40%;
+  height: 50%;
 }
 
 .task:hover > * {
@@ -168,9 +171,10 @@ li {
   background-color: none;
   top: 0%;
   right: 0%;
-  height: 22px;
+  height: 26px;
   width: auto;
   z-index: 5;
+  cursor: pointer;
 }
 
 .favoriteIcon.active {
@@ -188,9 +192,10 @@ li {
   height: 30px;
   width: auto;
   z-index: 5;
+  cursor: pointer;
 }
 .editTask {
-  right: 15%;
+  right: 18%;
 }
 
 .deleteTask {
@@ -217,12 +222,15 @@ li {
   width: 100%;
   border-radius: 0.7rem;
   font-size: 1.2rem;
+  user-select: none;
+  cursor: pointer;
 }
 
 .edit,
 .delete {
   width: 30px;
   height: auto;
+  cursor: pointer;
 }
 
 .edit {
@@ -251,25 +259,35 @@ li {
   justify-content: center;
   align-items: center;
 }
-.new {
-  border: 3px dashed orange;
-  border-radius: 1rem;
-}
 
 .statusTitle {
   font-size: 1.7rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
 
+#newTitle {
+  color: var(--new-color);
+}
+#inProgressTitle {
+  color: var(--inProgress-color);
+}
+#finishedTitle {
+  color: var(--finished-color);
+}
+.new {
+  border: 2px solid var(--new-color);
+  border-radius: 1rem;
+}
 .inProgress {
-  border: 3px dashed purple;
+  border: 2px solid var(--inProgress-color);
   border-radius: 1rem;
 }
 
 .finished {
-  border: 3px dotted green;
+  border: 2px solid var(--finished-color);
   border-radius: 1rem;
 }
 
@@ -285,19 +303,26 @@ li {
   background-color: var(--footer-color);
   grid-area: 3 / 1 / 4 / 3;
   z-index: 2;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   display: flex;
   gap: 0.6rem;
   justify-content: center;
   align-items: center;
+  letter-spacing: 0.1rem;
 }
 .gitHubLogo {
   height: 50px;
   width: auto;
 }
 
-/* tasks modal */
+.gitHubLogo:hover {
+  transform: scale(1.1);
+}
 
+/* tasks modal */
+a {
+  display: inline-block;
+}
 .tasksModal {
   position: fixed;
 }
@@ -487,16 +512,24 @@ button.exit {
 .color {
   display: flex;
   width: 100%;
-  padding: 0.5rem 1rem;
-  justify-content: space-between;
+  padding: 0.2rem 0.5rem;
+  justify-content: space-around;
 }
 
 #color-picker,
 #editedColor {
-  width: 20%;
+  width: 2rem;
+  height: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   align-self: end;
-  display: block;
+  border: none;
+  cursor: pointer;
+  border-radius: 2rem;
+  padding: 0;
 }
+
 form.newProject,
 form.editProject {
   display: flex;
@@ -521,7 +554,10 @@ form.editProject {
   border-radius: 0.5rem;
   padding: 0.4rem 2rem;
   font-size: 1.5rem;
-  border: 1px black solid;
   color: white;
-  background-color: skyblue;
+  font-weight: 500;
+  background-color: var(--accent-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
 }

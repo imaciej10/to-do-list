@@ -1,7 +1,8 @@
 import editIcon from "./img/edit.svg";
 import deleteIcon from "./img/delete.svg";
 import starIcon from "./img/star.svg";
-import Task, { populateForm } from "./tasks.js";
+import Task, { populateTaskForm } from "./tasks.js";
+import { populateProjectForm } from "./projects.js";
 import { projects } from "./index.js";
 import { el } from "date-fns/locale";
 let dragged;
@@ -43,6 +44,14 @@ const DOM = (function () {
       }
     });
   });
+
+  function deletionConfirmed() {
+    let result;
+    result = window.confirm("Are you sure to delete this project?");
+    if (result) {
+      return true;
+    }
+  }
 
   function createProjectElement(className, projectName) {
     const div = document.createElement("div");
@@ -125,7 +134,7 @@ const DOM = (function () {
     editTaskIcon.addEventListener("click", function (event) {
       event.stopPropagation();
       editTask(task);
-      populateForm(task, projects);
+      populateTaskForm(task, projects);
       editTaskModal.classList.add("active");
       overlay.classList.add("active");
     });
@@ -241,15 +250,22 @@ const DOM = (function () {
     container.removeChild(projectDiv);
   }
 
-  function addDeleteEditListeners(deleteBtn, editBtn, projectElement) {
+  function addDeleteEditListeners(
+    deleteBtn,
+    editBtn,
+    projectElement,
+    oldProject
+  ) {
     deleteBtn.addEventListener("click", function (event) {
       event.stopPropagation();
+      if (!deletionConfirmed()) return;
       removeTasks(projectElement);
       removeProject(projectElement);
       removeProjectFromList(deleteBtn, projectsContainer);
     });
     editBtn.addEventListener("click", function (event) {
       event.stopPropagation();
+      populateProjectForm(oldProject);
       editProject(projectElement);
     });
   }
@@ -262,7 +278,7 @@ const DOM = (function () {
     const editBtn = newProjectElement.querySelector(".edit");
     projectsContainer.appendChild(newProjectElement);
 
-    addDeleteEditListeners(deleteBtn, editBtn, newProjectElement);
+    addDeleteEditListeners(deleteBtn, editBtn, newProjectElement, project);
 
     newProjectElement.addEventListener("click", function () {
       const selectedProject = newProjectElement;

@@ -44,8 +44,16 @@ export const getEditedProject = function () {
 };
 
 export const getDefaultProjects = function () {
-  const project1 = new Project("Fix espresso machine", "#FF0000");
-  const project2 = new Project("Learn how to code", "#FFFF00");
+  const project1 = new Project("Fix espresso machine", "#CCDBDC");
+  const project2 = new Project("Learn how to code", "#D58D7E");
 
   return [project1, project2];
+};
+
+export const populateProjectForm = function (project) {
+  const editedTitle = document.querySelector("#editedTitle");
+  const editedColor = document.querySelector("#editedColor");
+  console.log(editedTitle);
+  editedTitle.value = project.name;
+  editedColor.value = project.color;
 };

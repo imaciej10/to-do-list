@@ -62,7 +62,7 @@ function updateProjectsInForm(projects, container) {
   });
 }
 
-export const populateForm = function (task, projects) {
+export const populateTaskForm = function (task, projects) {
   const editTaskForm = document.querySelector(".editTaskForm");
   const container = editTaskForm.querySelector("#projectName");
   editTaskForm.querySelector("#name").value = task.title;
