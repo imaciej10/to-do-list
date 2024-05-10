@@ -45,12 +45,14 @@ tasks2 = getProj2Tasks();
 tasks1.forEach((task) => proj1.addTask(task));
 tasks2.forEach((task) => proj2.addTask(task));
 
-projects.push(proj1, proj2);
+const storedProjectsJSON = localStorage.getItem("projects");
+const storedProjects = storedProjectsJSON ? JSON.parse(storedProjectsJSON) : [];
 
-// const storedProjectsJSON = localStorage.getItem("projects");
-// const storedProjects = storedProjectsJSON
-//   ? JSON.parse(storedProjectsJSON)
-//   : projects.push(storedProjects);
+if (storedProjects.length === 0) {
+  projects.push(proj1, proj2);
+} else {
+  storedProjects.forEach((project) => projects.push(project));
+}
 
 projects.forEach((project) => {
   DOM.appendProject("project", project);
@@ -62,8 +64,17 @@ const projectsForm = document.querySelector(".newProject");
 const editProjectForm = document.querySelector(".editProject");
 const editTaskForm = document.querySelector(".editTaskForm");
 
-DOM.updateProjectsInForm(projects); /// ???
+DOM.updateProjectsInForm(projects);
 DOM.taskMenuEventListeners(handleOptionClick);
+
+function saveProjectsToLocalStorage() {
+  try {
+    const projectsJSON = JSON.stringify(projects);
+    localStorage.setItem("projects", projectsJSON);
+  } catch (error) {
+    console.error("Error saving projects to local storage:", error);
+  }
+}
 
 function formatDate(date) {
   return date.toISOString().split("T")[0];
@@ -180,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mainElements.closeModal(mainElements.tasksModal);
     DOM.appendNewTask(project, newTask);
     tasksForm.reset();
+    saveProjectsToLocalStorage();
   });
 
   projectsForm.addEventListener("submit", function (event) {
@@ -190,9 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
     DOM.appendProject("project", newProject);
     DOM.updateProjectsInForm(projects);
     projectsForm.reset();
-    // localStorage.setItem("projects", JSON.stringify(projects));
-    // const storedProjects = JSON.parse(localStorage.getItem("projects"));
-    // console.log(storedProjects);
+    saveProjectsToLocalStorage();
   });
 
   editTaskForm.addEventListener("submit", function (event) {
@@ -219,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     editTaskForm.reset();
     mainElements.closeModal(mainElements.editTaskModal);
+    saveProjectsToLocalStorage();
   });
 
   editProjectForm.addEventListener("submit", function (event) {
@@ -235,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
     DOM.updateProjectsInForm(projects);
     editProjectForm.reset();
     mainElements.closeModal(mainElements.editProjectModal);
+    saveProjectsToLocalStorage();
   });
 
   document.addEventListener("projectEdited", function (event) {
@@ -279,6 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (project.tasks[i].title === taskName)
         project.tasks[i].status = newStatus;
     }
+    saveProjectsToLocalStorage();
   });
 
   document.addEventListener("projectRemoved", function (event) {
@@ -288,6 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
       projects.splice(index, 1);
     }
     DOM.updateProjectsInForm(projects);
+    saveProjectsToLocalStorage();
   });
 
   document.addEventListener("taskDeleted", function (event) {
@@ -304,6 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
     projects.forEach((project) => {
       DOM.updateTasks(project, project.tasks);
     });
+    saveProjectsToLocalStorage();
   });
 
   document.addEventListener("taskEdited", function (event) {
@@ -318,6 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     mainElements.openModal(mainElements.tasksModal);
     setDefaultDate();
+    saveProjectsToLocalStorage();
   });
 
   mainElements.addProject.addEventListener("click", () => {
