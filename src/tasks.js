@@ -1,5 +1,4 @@
 import { eachDayOfInterval } from "date-fns";
-import loadMain from "./main.js";
 
 export default class Task {
   constructor(

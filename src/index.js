@@ -1,6 +1,5 @@
-import _ from "lodash";
 import "./style.css";
-import Task, {
+import {
   getInputvalues,
   setDefaultDate,
   getProj1Tasks,
@@ -274,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-  document.addEventListener("projectDeselected", function (event) {
+  document.addEventListener("projectDeselected", function () {
     DOM.clearDashboard();
     projects.forEach((project) => {
       DOM.updateTasks(project, project.tasks);
@@ -334,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     [taskToEdit, projectToEdit] = getTaskAndProjectInfo(event);
   });
 
-  addTask.addEventListener("click", () => {
+  mainElements.addTask.addEventListener("click", () => {
     if (tasksCount() >= 12) {
       alert("Can't add more than twelve tasks!");
       return;

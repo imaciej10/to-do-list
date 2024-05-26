@@ -2,7 +2,7 @@ import editIcon from "./img/edit.svg";
 import deleteIcon from "./img/delete.svg";
 import starIcon from "./img/star.svg";
 import bellIcon from "./img/alert.svg";
-import Task, { populateTaskForm } from "./tasks.js";
+import { populateTaskForm } from "./tasks.js";
 import { populateProjectForm } from "./projects.js";
 import { projects } from "./index.js";
 import { el } from "date-fns/locale";
